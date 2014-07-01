@@ -2,10 +2,22 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title></title>
-	<script type="text/javascript" src="Veggie.js"></script>
-	<script type="text/javascript" src="main.js"></script>
+	<script type="text/javascript" src="src/Controls.js"></script>
+	<script type="text/javascript" src="src/Convert.js"></script>
+	<script type="text/javascript" src="src/GameLoop.js"></script>
+	<script type="text/javascript" src="src/Stage.js"></script>
+	<script type="text/javascript" src="src/Veggie.js"></script>
+	<script type="text/javascript" src="src/VeggieFactory.js"></script>
+	<script type="text/javascript" src="src/VeggieLauncher.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
+	<title>Salad Knight</title>
+	<script>
+		window.onload = function(){
+			Stage.init();
+			Controls.init();
+			GameLoop.start();
+		};
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -17,6 +29,8 @@
 			<div class="col-md-8">
 				<img id="img" src="vegetables.png" style="display:none;"/>
 				<canvas id="canvas"></canvas>
+				<br>
+				<a href="tests.html">Tests</a>
 			</div>
 			<div class="col-md-4">
 				<h2>Controls</h2>
