@@ -39,30 +39,33 @@
 				stage.draw();
 			})();
 			(function(){
-				var canvas = document.getElementById('canvas3');
-				var stage = new Stage(
-					canvas,
-					document.getElementById('img'),
-					500,200);
-				stage.init();
-				var veggies = new VeggieFactory.fullSet();
-				veggies.forEach(function(veggie,i){
-					veggie.pos.x = 80 * (i + 1);
-					veggie.pos.y = 80;
-					stage.veggies.push(veggie);
-				});
-				stage.draw();
-				var split = false;
-				canvas.addEventListener('click',function(){
-					if(split){//put them back together
-						stage.veggies = veggies.slice(0);
-					} else {//take them apart
-						veggies.forEach(function(veggie){
-							stage.splitVeggie(veggie);
-						});
-					}
-					split = !split;
+				[3,4,5,6].forEach(function(n,testIndex){
+					var canvas = document.getElementById('canvas' + n);
+					var stage = new Stage(
+						canvas,
+						document.getElementById('img'),
+						500,200);
+					stage.init();
+					var veggies = new VeggieFactory.fullSet();
+					veggies.forEach(function(veggie,i){
+						veggie.pos.x = 80 * (i + 1);
+						veggie.pos.y = 80;
+						stage.veggies.push(veggie);
+						veggie.rot = 45 * testIndex;
+					});
 					stage.draw();
+					var split = false;
+					canvas.addEventListener('click',function(){
+						if(split){//put them back together
+							stage.veggies = veggies.slice(0);
+						} else {//take them apart
+							veggies.forEach(function(veggie){
+								stage.splitVeggie(veggie);
+							});
+						}
+						split = !split;
+						stage.draw();
+					});
 				});
 			})();
 		};
@@ -95,9 +98,12 @@
 				<div class="row">
 					<div class="col-sm-8">
 						<canvas id="canvas3"></canvas>
+						<canvas id="canvas4"></canvas>
+						<canvas id="canvas5"></canvas>
+						<canvas id="canvas6"></canvas>
 					</div>
 					<div class="col-sm-4">
-						Click the canvas to toggle between whole and split
+						Click each canvas to toggle between whole and split
 					</div>
 				</div>
 			</div>
