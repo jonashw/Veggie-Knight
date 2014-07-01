@@ -73,20 +73,20 @@ var VeggieFactory = (function(){
 			h: 280,
 	        splits: [
 				{
-					x: 1260,
+					x: 1255,
 					y: 8,
 					w: 74,
 					h: 176
 				},
 				{
-					x: 1256,
+					x: 1258,
 					y: 191,
 					w: 71,
 					h: 151
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 50
+			splitSeparation: 55
 		},
 		celery: {
 			x: 1435,
@@ -108,7 +108,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 50
+			splitSeparation: 55
 		}
 	};
 	var spriteKeys = (function(){
