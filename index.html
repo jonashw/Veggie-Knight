@@ -24,6 +24,11 @@
 			stage.init();
 			controls.init();
 			gameLoop.start();
+			controls.on('swipemove',function(x,y){
+				stage.getVeggiesAt(x, y).forEach(function(veggie){
+					stage.splitVeggie(veggie);
+				});
+			});
 		};
 	</script>
 </head>
@@ -45,6 +50,8 @@
 				<kbd>Space</kbd> Launch some veggies
 				<br>
 				<kbd>Ctrl</kbd> Play/Pause
+				<br>
+				<kbd>Swipe</kbd> Slice veggies
 			</div>
 		</div>
 	</div>
