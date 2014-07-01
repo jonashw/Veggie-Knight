@@ -1,11 +1,10 @@
 function Veggie(sprite){
-	var scaleFactor = 0.33;
 	this.sprite = sprite;
 	this.pos = {x:0,y:0};
 	this.vel = {x:0,y:0};
 	this.rot = 0;
 	this.rotVel = 0;
-	this.draw = function(img, ctx){
+	this.draw = function(img, ctx, scaleFactor){
 		ctx.save();
 		ctx.translate(this.pos.x, this.pos.y);
 		ctx.rotate(Convert.degToRad(this.rot));

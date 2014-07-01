@@ -13,7 +13,10 @@
 	<title>Salad Knight</title>
 	<script>
 		window.onload = function(){
-			var stage = new Stage(document.getElementById('canvas'));
+			var stage = new Stage(
+				document.getElementById('canvas'),
+				document.getElementById('img'),
+				500,300);
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
 			var controls = new Controls(gameLoop,veggieLauncher);

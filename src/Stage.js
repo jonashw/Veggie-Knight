@@ -1,4 +1,4 @@
-var Stage = function(canvas){
+var Stage = function(canvas,veggieImg,width,height){
 	var _img, _ctx;
 	function veggieOffStage(veggie){
 		return veggie.pos.y < _ctx.canvas.height + 100;
@@ -12,9 +12,11 @@ var Stage = function(canvas){
 	return {
 		init: function(){
 			_ctx = canvas.getContext('2d');
-			_ctx.canvas.width = 500;
-			_ctx.canvas.height = 300;
-			_img = document.getElementById('img');
+			_ctx.canvas.width = width;
+			_ctx.canvas.height = height;
+			_img = veggieImg;
+			_scaleFactor = width / _img.width;
+			console.log('canvas width:',width,' image width:',_img.width, ' scale factor:',_scaleFactor);
 		},
 		veggies: [],
 		getHeight: function(){
@@ -23,7 +25,7 @@ var Stage = function(canvas){
 		draw: function(){
 			clear();
 			this.veggies.forEach(function(veggie,i){
-				veggie.draw(_img,_ctx);
+				veggie.draw(_img,_ctx,_scaleFactor);
 			});
 			//remove veggies that have left the stage
 			this.veggies = this.veggies.filter(function(veggie){
