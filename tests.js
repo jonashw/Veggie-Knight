@@ -133,4 +133,69 @@ window.onload = function(){
 			}
 		});
 	})();
+	(function(){
+		var canvas = document.getElementById('canvas13');
+		var ctx = canvas.getContext('2d');
+		var stage = new Stage(
+			canvas,
+			document.getElementById('img'),
+			500,200);
+		stage.init();
+		var controls = new Controls(canvas);
+		controls.init();
+		stage.draw();
+		controls.on('swipemove',function(x,y){
+			ctx.fillRect(x,y,3,3);
+		});
+		controls.on('swipestop',function(x,y){
+			stage.draw();
+		});
+	})();
+	(function(){
+		var canvas = document.getElementById('canvas14');
+		var ctx = canvas.getContext('2d');
+		var scoreBoard = document.getElementById('scoreboard14');
+		var stage = new Stage(
+			canvas,
+			document.getElementById('img'),
+			500,200);
+		stage.init();
+		var controls = new Controls(canvas);
+		controls.init();
+		var veggies = new VeggieFactory.fullSet();
+		veggies.forEach(function(veggie,i){
+			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.y = 80;
+			stage.veggies.push(veggie);
+		});
+		stage.draw();
+		var swipedVeggies = [];
+		controls.on('swipemove',function(x,y){
+			var touchedVeggies = stage.getVeggiesAt(x, y);
+			touchedVeggies.forEach(function(veggie){
+				stage.splitVeggie(veggie);
+				if(swipedVeggies.indexOf(veggie) === -1){
+					swipedVeggies.push(veggie);
+				}
+			});
+			stage.swipeTrail.push({x:x,y:y});
+			ctx.fillRect(x,y,3,3);
+			stage.draw();
+		});
+		controls.on('swipestop',function(x,y){
+			stage.swipeTrail = [];
+			scoreBoard.innerHTML = swipedVeggies.length + "-veggie combo";
+			swipedVeggies = [];
+			var wholeVeggiesLeft = stage.veggies.filter(function(veggie){
+				return veggie.whole;
+			});
+			if(wholeVeggiesLeft.length == 0){
+				setTimeout(function(){
+					stage.veggies = veggies;
+					stage.draw();
+				},500);
+			}
+			stage.draw();
+		});
+	})();
 };

@@ -38,16 +38,28 @@ function Veggie(type,sprite,whole){
 		//apply rotational velocity
 		this.rot += this.rotVel;
 	};
+	var getSplitVeggies = (function(){
+		//prevent creating more splits than are needed
+		//this will come in handy when the I implement the flyweight pattern on veggies 
+		var _veggies = null;
+		return function(){
+			if(_veggies == null){
+				_veggies = sprite.splits.map(function(splitSprite){
+					return new Veggie(self.type, splitSprite, false);
+				});
+			}
+			return _veggies;
+		};
+	})();
 	this.getSplits = function(){
 		if(this.whole){
 			var self = this;
-			var splits = sprite.splits.map(function(splitSprite){
-				var veggie = new Veggie(self.type, splitSprite, false);
-				veggie.rot = self.rot;
-				veggie.pos = {x: self.pos.x, y: self.pos.y};
-				veggie.vel = {x: self.vel.x, y: self.vel.y};
-				veggie.rotVel = self.rotVel;
-				return veggie;
+			var splits = getSplitVeggies();
+			splits.forEach(function(split){
+				split.rot = self.rot;
+				split.pos = {x: self.pos.x, y: self.pos.y};
+				split.vel = {x: self.vel.x, y: self.vel.y};
+				split.rotVel = self.rotVel;
 			});
 			if(sprite.splitsAlongX){
 				var rotRad = Convert.degToRad(90 - self.rot);

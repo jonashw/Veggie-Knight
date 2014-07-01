@@ -20,6 +20,7 @@ var Stage = function(canvas,veggieImg,width,height){
 			console.log('canvas width:',width,' image width:',_img.width, ' scale factor:',_scaleFactor);
 		},
 		veggies: [],
+		swipeTrail:[],
 		getHeight: function(){
 			return _ctx.canvas.height;
 		},
@@ -34,6 +35,9 @@ var Stage = function(canvas,veggieImg,width,height){
 			//remove veggies that have left the stage
 			this.veggies = this.veggies.filter(function(veggie){
 				return veggieOffStage(veggie);
+			});
+			this.swipeTrail.forEach(function(swipePoint){
+				_ctx.fillRect(swipePoint.x, swipePoint.y, 5, 5);
 			});
 		},
 		update: function(){
@@ -57,7 +61,7 @@ var Stage = function(canvas,veggieImg,width,height){
 		},
 		getVeggiesAt: function(x,y){
 			return this.veggies.filter(function(veggie){
-				return veggie.containsPoint(x, y, _scaleFactor);
+				return veggie.whole && veggie.containsPoint(x, y, _scaleFactor);
 			});
 		}
 	};

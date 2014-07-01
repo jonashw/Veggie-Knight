@@ -25,19 +25,47 @@ var Controls = function(canvas,gameLoop,veggieLauncher){
 				//console.log(e.which);
 			});
 			var _mouseDown = false;
-			canvas.addEventListener('mousedown',function(e){
-				_mouseDown = true;
+			var _swipeStarted = false;
+			function startSwipe(e){
 				notifyObs('swipestart',e.offsetX,e.offsetY);
+				_swipeStarted = true;
+				setTimeout(function(e){
+					_swipeStarted = false;
+				},300);
+			}
+			function stopSwipe(e){
+				notifyObs('swipestop',e.offsetX,e.offsetY);
+			}
+			function continueSwipe(e){
+				notifyObs('swipemove',e.offsetX,e.offsetY);
+			}
+
+			canvas.addEventListener('mousedown',function(e){
+				e.preventDefault();
+				_mouseDown = true;
+				startSwipe(e);
 			});
 			canvas.addEventListener('mouseup',function(e){
 				_mouseDown = false;
-				notifyObs('swipestop',e.offsetX,e.offsetY);
+				stopSwipe(e);
 			});
 			canvas.addEventListener('mousemove',function(e){
 				if(!_mouseDown){
 					return true;
 				}
-				notifyObs('swipemove',e.offsetX,e.offsetY);
+				if(_swipeStarted){
+					continueSwipe(e);
+				} else {
+					stopSwipe(e);
+					startSwipe(e);
+				}
+				e.stopPropagation();
+			});
+			document.body.addEventListener('mousemove',function(e){
+				if(_swipeStarted){
+					_mouseDown = false;
+					stopSwipe(e);
+				}
 			});
 		},
 		on: function(evnt,fn){
