@@ -1,7 +1,8 @@
-var GameLoop = (function(){
+var GameLoop = function(stage){
 	var _interval;
 	var _loop = function(){
-		Stage.update();
+		stage.update();
+		stage.draw();
 	};
 	return {
 		start: function(){
@@ -20,4 +21,4 @@ var GameLoop = (function(){
 			}
 		}
 	};
-})();
+};

@@ -1,4 +1,4 @@
-var VeggieLauncher = (function(){
+var VeggieLauncher = function(stage){
 	function randomRotation(){
 		var rot = Math.floor(Math.random() * 8) - 4;
 		if (rot == 0){
@@ -13,11 +13,11 @@ var VeggieLauncher = (function(){
 			var x = 6 / (veggies.length + 0.5);
 			veggies.forEach(function(veggie,i){
 				veggie.pos.x = 70 * (i + x);
-				veggie.pos.y = Stage.getHeight();
+				veggie.pos.y = stage.getHeight();
 				veggie.vel.y = 6.5;
 				veggie.rotVel = randomRotation();
-				Stage.veggies.push(veggie);
+				stage.veggies.push(veggie);
 			});
 		}
 	};
-})();
+};
