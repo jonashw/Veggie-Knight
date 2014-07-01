@@ -11,6 +11,7 @@ var Stage = function(canvas,veggieImg,width,height){
 	}
 	return {
 		init: function(){
+			canvas.style.cursor = 'pointer';
 			_ctx = canvas.getContext('2d');
 			_ctx.canvas.width = width;
 			_ctx.canvas.height = height;
@@ -21,6 +22,9 @@ var Stage = function(canvas,veggieImg,width,height){
 		veggies: [],
 		getHeight: function(){
 			return _ctx.canvas.height;
+		},
+		getCanvas: function(){
+			return canvas;
 		},
 		draw: function(){
 			clear();
