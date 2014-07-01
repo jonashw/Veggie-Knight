@@ -1,0 +1,107 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript" src="src/Convert.js"></script>
+	<script type="text/javascript" src="src/Stage.js"></script>
+	<script type="text/javascript" src="src/Veggie.js"></script>
+	<script type="text/javascript" src="src/VeggieFactory.js"></script>
+	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
+	<script>
+		window.onload = function(){
+			(function(){
+				var stage = new Stage(
+					document.getElementById('canvas1'),
+					document.getElementById('img'),
+					500,200);
+				stage.init();
+				var veggies = new VeggieFactory.fullSet();
+				veggies.forEach(function(veggie,i){
+					veggie.pos.x = 80 * (i + 1);
+					veggie.pos.y = 80;
+					stage.veggies.push(veggie);
+				});
+				stage.draw();
+			})();
+			(function(){
+				var stage = new Stage(
+					document.getElementById('canvas2'),
+					document.getElementById('img'),
+					500,200);
+				stage.init();
+				var veggies = new VeggieFactory.fullSplitSet();
+				veggies.forEach(function(veggie,i){
+					veggie.pos.x = 50 * (i + .5);
+					veggie.pos.y = 80;
+					stage.veggies.push(veggie);
+				});
+				stage.draw();
+			})();
+			(function(){
+				var canvas = document.getElementById('canvas3');
+				var stage = new Stage(
+					canvas,
+					document.getElementById('img'),
+					500,200);
+				stage.init();
+				var veggies = new VeggieFactory.fullSet();
+				veggies.forEach(function(veggie,i){
+					veggie.pos.x = 80 * (i + 1);
+					veggie.pos.y = 80;
+					stage.veggies.push(veggie);
+				});
+				stage.draw();
+				var split = false;
+				canvas.addEventListener('click',function(){
+					if(split){//put them back together
+						stage.veggies = veggies.slice(0);
+					} else {//take them apart
+						veggies.forEach(function(veggie){
+							stage.splitVeggie(veggie);
+						});
+					}
+					split = !split;
+					stage.draw();
+				});
+			})();
+		};
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="page-header">
+			<a href="index.html">Index</a>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<img id="img" src="vegetables.png" style="display:none;"/>
+				<div class="row">
+					<div class="col-sm-8">
+						<canvas id="canvas1"></canvas>
+					</div>
+					<div class="col-sm-4">
+						Static display of all veggies
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+						<canvas id="canvas2"></canvas>
+					</div>
+					<div class="col-sm-4">
+						Static display of all splits
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-8">
+						<canvas id="canvas3"></canvas>
+					</div>
+					<div class="col-sm-4">
+						Click the canvas to toggle between whole and split
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

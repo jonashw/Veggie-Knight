@@ -36,6 +36,17 @@ var Stage = function(canvas,veggieImg,width,height){
 			this.veggies.forEach(function(veggie,i){
 				veggie.update();
 			});
+		},
+		removeVeggie: function(veggie){
+			var index = this.veggies.indexOf(veggie);
+			this.veggies.splice(index,1);
+		},
+		splitVeggie: function(veggie){
+			this.removeVeggie(veggie);
+			var self = this;
+			veggie.getSplits().forEach(function(split){
+				self.veggies.push(split);
+			});
 		}
 	};
 };
