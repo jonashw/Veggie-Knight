@@ -42,13 +42,21 @@ function Veggie(type,sprite,whole){
 				return veggie;
 			});
 			if(sprite.splitsAlongX){
-				var h = sprite.splitSeparation / 2;//sprite.h / 8;
-				splits[0].pos.y -= h;
-				splits[1].pos.y += h;
+				var rotRad = Convert.degToRad(90 - self.rot);
+				var dY = 0.5 * sprite.splitSeparation * Math.sin(rotRad);
+				var dX = 0.5 * sprite.splitSeparation * Math.cos(rotRad);
+				splits[0].pos.x += dX;
+				splits[0].pos.y -= dY;
+				splits[1].pos.x -= dX;
+				splits[1].pos.y += dY;
 			} else {
-				var w = sprite.splitSeparation / 2;//sprite.h / 8;
-				splits[0].pos.x -= w;
-				splits[1].pos.x += w;
+				var rotRad = Convert.degToRad(self.rot + 90);
+				var dY = 0.5 * sprite.splitSeparation * Math.sin(rotRad);
+				var dX = 0.5 * sprite.splitSeparation * Math.cos(rotRad);
+				splits[0].pos.x -= dY;
+				splits[0].pos.y += dX;
+				splits[1].pos.x += dY;
+				splits[1].pos.y -= dX;
 			}
 			return splits;
 		} else {

@@ -39,7 +39,7 @@
 				stage.draw();
 			})();
 			(function(){
-				[3,4,5,6].forEach(function(n,testIndex){
+				[3,4,5,6,7,8,9,10].forEach(function(n,testIndex){
 					var canvas = document.getElementById('canvas' + n);
 					var stage = new Stage(
 						canvas,
@@ -48,14 +48,14 @@
 					stage.init();
 					var veggies = new VeggieFactory.fullSet();
 					veggies.forEach(function(veggie,i){
-						veggie.pos.x = 80 * (i + 1);
+						veggie.pos.x = 100 * (i + 0.5);
 						veggie.pos.y = 80;
 						stage.veggies.push(veggie);
 						veggie.rot = 45 * testIndex;
 					});
 					stage.draw();
 					var split = false;
-					canvas.addEventListener('click',function(){
+					setInterval(function(){
 						if(split){//put them back together
 							stage.veggies = veggies.slice(0);
 						} else {//take them apart
@@ -65,7 +65,7 @@
 						}
 						split = !split;
 						stage.draw();
-					});
+					}, 1000);
 				});
 			})();
 		};
@@ -80,30 +80,34 @@
 			<div class="col-md-8">
 				<img id="img" src="vegetables.png" style="display:none;"/>
 				<div class="row">
-					<div class="col-sm-8">
+					<div class="col-md-8">
 						<canvas id="canvas1"></canvas>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-md-4">
 						Static display of all veggies
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-8">
+					<div class="col-md-8">
 						<canvas id="canvas2"></canvas>
 					</div>
-					<div class="col-sm-4">
+					<div class="col-md-4">
 						Static display of all splits
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-sm-8">
+					<div class="col-md-8">
 						<canvas id="canvas3"></canvas>
 						<canvas id="canvas4"></canvas>
 						<canvas id="canvas5"></canvas>
 						<canvas id="canvas6"></canvas>
+						<canvas id="canvas7"></canvas>
+						<canvas id="canvas8"></canvas>
+						<canvas id="canvas9"></canvas>
+						<canvas id="canvas10"></canvas>
 					</div>
-					<div class="col-sm-4">
-						Click each canvas to toggle between whole and split
+					<div class="col-md-4">
+						Toggle between whole and split
 					</div>
 				</div>
 			</div>
