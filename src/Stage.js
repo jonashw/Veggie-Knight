@@ -25,7 +25,7 @@ var Stage = function(canvas,veggieImg,width,height){
 		draw: function(){
 			clear();
 			this.veggies.forEach(function(veggie,i){
-				veggie.draw(_img,_ctx,_scaleFactor);
+				veggie.draw(_img, _ctx, _scaleFactor);
 			});
 			//remove veggies that have left the stage
 			this.veggies = this.veggies.filter(function(veggie){
@@ -42,10 +42,18 @@ var Stage = function(canvas,veggieImg,width,height){
 			this.veggies.splice(index,1);
 		},
 		splitVeggie: function(veggie){
+			if(!veggie.whole){
+				return;
+			}
 			this.removeVeggie(veggie);
 			var self = this;
 			veggie.getSplits().forEach(function(split){
 				self.veggies.push(split);
+			});
+		},
+		getVeggiesAt: function(x,y){
+			return this.veggies.filter(function(veggie){
+				return veggie.containsPoint(x, y, _scaleFactor);
 			});
 		}
 	};

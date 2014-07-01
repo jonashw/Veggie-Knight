@@ -21,6 +21,14 @@ function Veggie(type,sprite,whole){
 			scaleFactor * sprite.h);
 		ctx.restore();
 	}
+	this.containsPoint = function(x,y,scaleFactor){
+		var x1 = this.pos.x + scaleFactor * sprite.w/-2;
+		var x2 = x1 + scaleFactor * sprite.w;
+		var y1 = this.pos.y + scaleFactor * sprite.h/-2;
+		var y2 = y1 + scaleFactor * sprite.h;
+		//console.log(this.type,'(x1,x2):',x1,x2,'(y1,y2):',y1,y2);
+		return (x1 <= x && x <= x2) && (y1 <= y && y <= y2);
+	};
 	this.update = function(){
 		//apply velocity
 		this.pos.y -= this.vel.y;//cause the canvas is flipped :/

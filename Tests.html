@@ -68,6 +68,47 @@
 					}, 1000);
 				});
 			})();
+			(function(){
+				var canvas = document.getElementById('canvas11');
+				var stage = new Stage(
+					canvas,
+					document.getElementById('img'),
+					500,200);
+				stage.init();
+				var veggies = new VeggieFactory.fullSet();
+				veggies.forEach(function(veggie,i){
+					veggie.pos.x = 80 * (i + 1);
+					veggie.pos.y = 80;
+					stage.veggies.push(veggie);
+				});
+				stage.draw();
+				canvas.addEventListener('click',function(e){
+					//console.log('click on canvas:', e.offsetX, e.offsetY);
+					var clickedVeggies = stage.getVeggiesAt(e.offsetX, e.offsetY)
+					if(clickedVeggies.length == 0){
+						console.log('no veggies clicked');
+					} else {
+						var clickedVeggieNames = clickedVeggies.map(function(veggie){
+							return veggie.type;
+						});
+						console.log('clicked veggies:',clickedVeggieNames);
+						clickedVeggies.forEach(function(veggie){
+							console.log(veggie);
+							stage.splitVeggie(veggie);
+						});
+						stage.draw();
+						var wholeVeggiesLeft = stage.veggies.filter(function(veggie){
+							return veggie.whole;
+						});
+						if(wholeVeggiesLeft.length == 0){
+							setTimeout(function(){
+								stage.veggies = veggies;
+								stage.draw();
+							},500);
+						}
+					}
+				});
+			})();
 		};
 	</script>
 </head>
@@ -108,6 +149,14 @@
 						<canvas id="canvas8"></canvas>
 						<canvas id="canvas9"></canvas>
 						<canvas id="canvas10"></canvas>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						Veggies should split when clicked
+					</div>
+					<div class="col-md-8">
+						<canvas id="canvas11"></canvas>
 					</div>
 				</div>
 			</div>
