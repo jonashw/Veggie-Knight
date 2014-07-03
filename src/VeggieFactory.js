@@ -118,6 +118,10 @@ var VeggieFactory = (function(){
 		}
 		return _keys;
 	})();
+	function randomSpriteKey(){
+		var i = Math.floor(Math.random() * spriteKeys.length);
+		return spriteKeys[i];
+	}
 	return {
 		fullSet: function(){
 			var veggies = [];
@@ -128,15 +132,24 @@ var VeggieFactory = (function(){
 			return veggies;
 		},
 		random: function(){
-			var i = Math.floor(Math.random() * spriteKeys.length);
-			var k = spriteKeys[i];
+			var k = randomSpriteKey();
 			return new Veggie(k,sprites[k],true);
 		},
-		randomSet: function(){
+		randomSet: function(n){
 			var veggies = [];
-			var n = Math.floor(Math.random() * 5) + 1; //no more than 6 at once
+			var n = n || Math.floor(Math.random() * 5) + 1; //no more than 6 at once
 			for(var i=0; i<n; i++){
 				veggies.push(this.random());
+			}
+			return veggies;
+		},
+		randomFlush: function(n){
+			var veggies = [];
+			var n = n || Math.floor(Math.random() * 5) + 1; //no more than 6 at once
+			var k = randomSpriteKey();
+			var sprite = sprites[k];
+			for(var i=0; i<n; i++){
+				veggies.push(new Veggie(k,sprite,true));
 			}
 			return veggies;
 		},

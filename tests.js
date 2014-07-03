@@ -198,4 +198,42 @@ window.onload = function(){
 			stage.draw();
 		});
 	})();
+	function testLauncher(canvasId,launchFn,launchDelay){
+		var canvas = document.getElementById(canvasId);
+		var ctx = canvas.getContext('2d');
+		var stage = new Stage(
+			canvas,
+			document.getElementById('img'),
+			500,300);
+		stage.init();
+		var launcher = new VeggieLauncher(stage);
+		var gameLoop = new GameLoop(stage);
+		stage.draw();
+		gameLoop.start();
+		launchFn(launcher);
+		setInterval(function(){
+			launchFn(launcher);
+		},launchDelay || 3000);
+	}
+	testLauncher('canvas15',function(launcher){
+		launcher.convexPulse(VeggieFactory.randomFlush(5));
+	});
+	testLauncher('canvas16',function(launcher){
+		launcher.concavePulse(VeggieFactory.randomFlush(5));
+	});
+	testLauncher('canvas17',function(launcher){
+		launcher.cascadeLeft(VeggieFactory.randomFlush(5));
+	},3500);
+	testLauncher('canvas18',function(launcher){
+		launcher.cascadeRight(VeggieFactory.randomFlush(5));
+	},3500);
+	testLauncher('canvas19',function(launcher){
+		launcher.mortarLeft(VeggieFactory.randomFlush(3));
+	},3500);
+	testLauncher('canvas20',function(launcher){
+		launcher.mortarRight(VeggieFactory.randomFlush(3));
+	},3500);
+	testLauncher('canvas21',function(launcher){
+		launcher.bounce(VeggieFactory.randomFlush(5));
+	},5500);
 };

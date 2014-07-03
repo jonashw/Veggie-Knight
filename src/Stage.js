@@ -24,6 +24,9 @@ var Stage = function(canvas,veggieImg,width,height){
 		getHeight: function(){
 			return _ctx.canvas.height;
 		},
+		getWidth: function(){
+			return _ctx.canvas.width;
+		},
 		getCanvas: function(){
 			return canvas;
 		},
