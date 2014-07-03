@@ -155,6 +155,19 @@ window.onload = function(){
 		var canvas = document.getElementById('canvas14');
 		var ctx = canvas.getContext('2d');
 		var scoreBoard = document.getElementById('scoreboard14');
+		function logCombo(comboSize){
+			if(comboSize <= 0){
+				return;
+			}
+			var comboRecord = document.createElement('div');
+			comboRecord.innerHTML = comboSize + "-veggie combo!";
+			if(scoreBoard.children.length){
+				var firstChild = scoreBoard.children[0];
+				scoreBoard.insertBefore(comboRecord,firstChild);
+			} else {
+				scoreBoard.appendChild(comboRecord);
+			}
+		}
 		var stage = new Stage(
 			canvas,
 			document.getElementById('img'),
@@ -184,7 +197,7 @@ window.onload = function(){
 		});
 		controls.on('swipestop',function(x,y){
 			stage.swipeTrail = [];
-			scoreBoard.innerHTML = swipedVeggies.length + "-veggie combo";
+			logCombo(swipedVeggies.length);
 			swipedVeggies = [];
 			var wholeVeggiesLeft = stage.veggies.filter(function(veggie){
 				return veggie.whole;
