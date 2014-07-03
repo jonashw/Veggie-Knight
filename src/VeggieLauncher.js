@@ -83,34 +83,39 @@ var VeggieLauncher = function(stage){
 			veggie.vel.x = v_x;
 		});
 	}
+	//
+	var launchMethodNames = [
+		'convexPulse',
+		'concavePulse',
+		'cascadeRight',
+		'cascadeLeft',
+		'mortarRight',
+		'mortarLeft',
+		'bounce'
+	];
 	return {
-		launch: function(veggies){
-			var x = 6 / (veggies.length + 0.5);
-			veggies.forEach(function(veggie,i){
-				veggie.pos.x = 70 * (i + x);
-				veggie.pos.y = stage.getHeight();
-				veggie.vel.y = 6.5;
-				veggie.rotVel = randomRotation();
-				stage.veggies.push(veggie);
-			});
+		randomLaunch: function(veggies){
+			var i = Math.floor(Math.random() * launchMethodNames.length);
+			var k = launchMethodNames[i];
+			this[k](veggies);
 		},
 		convexPulse: function(veggies){
-			centerD(4,veggies);
+			centerD(100,veggies);
 			convexAngles(veggies);
 			launch(veggies);
 		},
 		concavePulse: function(veggies){
-			centerD(2,veggies);
+			centerD(3,veggies);
 			concaveAngles(veggies);
 			launch(veggies);
 		},
 		cascadeRight: function(veggies){
-			centerD(4,veggies);
+			centerD(3,veggies);
 			convexAngles(veggies);
 			launchAsync(veggies,200);
 		},
 		cascadeLeft: function(veggies){
-			centerD(4,veggies);
+			centerD(3,veggies);
 			convexAngles(veggies);
 			launchAsync(veggies.reverse(),200);
 		},
@@ -132,7 +137,7 @@ var VeggieLauncher = function(stage){
 				veggies2.push(veggiesCopy.shift());
 				veggiesCopy.reverse();
 			}
-			launchAsync(veggies2,700,function(veggie){
+			launchAsync(veggies2,300,function(veggie){
 				veggie.vel.y = 6.5;
 			});
 		}

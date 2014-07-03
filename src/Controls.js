@@ -12,17 +12,11 @@ var Controls = function(canvas,gameLoop,veggieLauncher){
 	return {
 		init: function(){
 			document.addEventListener('keyup',function(e){
-				if(e.which == 32){//spacebar
-					if(!!veggieLauncher){
-						veggieLauncher.launch(VeggieFactory.randomSet());
-					}
-				}
-				if(e.which == 17){//Ctrl
+				if(e.which == 32){//Space
 					if(!!gameLoop){
 						gameLoop.playPause();
 					}
 				}
-				//console.log(e.which);
 			});
 			var _mouseDown = false;
 			var _swipeStarted = false;
