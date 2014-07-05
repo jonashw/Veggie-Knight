@@ -1,8 +1,8 @@
-window.onload = function(){
-	(function(){
+function runTests(testCase){
+	testCase('static display of all veggies',function(canvas,img){
 		var stage = new Stage(
-			document.getElementById('canvas1'),
-			document.getElementById('img'),
+			canvas,
+			img,
 			500,200);
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
@@ -12,11 +12,11 @@ window.onload = function(){
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
-	})();
-	(function(){
+	});
+	testCase('static display of all splits', function(canvas, img){
 		var stage = new Stage(
-			document.getElementById('canvas2'),
-			document.getElementById('img'),
+			canvas,
+			img,
 			500,200);
 		stage.init();
 		var veggies = new VeggieFactory.fullSplitSet();
@@ -26,13 +26,13 @@ window.onload = function(){
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
-	})();
-	(function(){
-		[3,4,5,6,7,8,9,10].forEach(function(n,testIndex){
-			var canvas = document.getElementById('canvas' + n);
+	});
+	[0,1,2,3,4,5,6,7].forEach(function(n){
+		var degrees = n * 45;
+		testCase('Toggle between whole and split: ' + degrees + ' degrees',function(canvas,img){
 			var stage = new Stage(
 				canvas,
-				document.getElementById('img'),
+				img,
 				500,200);
 			stage.init();
 			var veggies = new VeggieFactory.fullSet();
@@ -40,7 +40,7 @@ window.onload = function(){
 				veggie.pos.x = 100 * (i + 0.5);
 				veggie.pos.y = 80;
 				stage.veggies.push(veggie);
-				veggie.rot = 45 * testIndex;
+				veggie.rot = 45 * n;
 			});
 			stage.draw();
 			var split = false;
@@ -56,12 +56,11 @@ window.onload = function(){
 				stage.draw();
 			}, 1000);
 		});
-	})();
-	(function(){
-		var canvas = document.getElementById('canvas11');
+	});
+	testCase('veggies should split when clicked', function(canvas,img){
 		var stage = new Stage(
 			canvas,
-			document.getElementById('img'),
+			img,
 			500,200);
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
@@ -97,13 +96,12 @@ window.onload = function(){
 				}
 			}
 		});
-	})();
-	(function(){
-		var canvas = document.getElementById('canvas12');
+	});
+	testCase('Veggies should split when swiped.  Multiple veggies can be swiped at once.', function(canvas, img){
 		var ctx = canvas.getContext('2d');
 		var stage = new Stage(
 			canvas,
-			document.getElementById('img'),
+			img,
 			500,200);
 		stage.init();
 		var controls = new Controls(canvas);
@@ -132,13 +130,12 @@ window.onload = function(){
 				},500);
 			}
 		});
-	})();
-	(function(){
-		var canvas = document.getElementById('canvas13');
+	});
+	testCase('A swipe is time-based.',function(canvas,img){
 		var ctx = canvas.getContext('2d');
 		var stage = new Stage(
 			canvas,
-			document.getElementById('img'),
+			img,
 			500,200);
 		stage.init();
 		var controls = new Controls(canvas);
@@ -150,11 +147,17 @@ window.onload = function(){
 		controls.on('swipestop',function(x,y){
 			stage.draw();
 		});
-	})();
-	(function(){
-		var canvas = document.getElementById('canvas14');
+	});
+	testCase(['A group of veggies can be sliced in a single swipe.',
+	'<br>These veggies will be considered to be part of a *combo*.'].join(''),
+	function(canvas,img,leftCol){
+		leftCol.appendChild(document.createElement('br'));
+		leftCol.appendChild(document.createElement('br'));
+		var scoreBoard = document.createElement('div');
+		scoreBoard.style['max-height'] = '60px';
+		scoreBoard.style['overflow-y'] = 'auto';
+		leftCol.appendChild(scoreBoard);
 		var ctx = canvas.getContext('2d');
-		var scoreBoard = document.getElementById('scoreboard14');
 		function logCombo(comboSize){
 			if(comboSize <= 0){
 				return;
@@ -170,7 +173,7 @@ window.onload = function(){
 		}
 		var stage = new Stage(
 			canvas,
-			document.getElementById('img'),
+			img,
 			500,200);
 		stage.init();
 		var controls = new Controls(canvas);
@@ -210,43 +213,44 @@ window.onload = function(){
 			}
 			stage.draw();
 		});
-	})();
-	function testLauncher(canvasId,launchFn,launchDelay){
-		var canvas = document.getElementById(canvasId);
-		var ctx = canvas.getContext('2d');
-		var stage = new Stage(
-			canvas,
-			document.getElementById('img'),
-			500,300);
-		stage.init();
-		var launcher = new VeggieLauncher(stage);
-		var gameLoop = new GameLoop(stage);
-		stage.draw();
-		gameLoop.start();
-		launchFn(launcher);
-		setInterval(function(){
+	});
+	function testLauncher(title,launchFn,launchDelay){
+		testCase('Launcher: ' + title, function(canvas,img){
+			var ctx = canvas.getContext('2d');
+			var stage = new Stage(
+				canvas,
+				img,
+				500,300);
+			stage.init();
+			var launcher = new VeggieLauncher(stage);
+			var gameLoop = new GameLoop(stage);
+			stage.draw();
+			gameLoop.start();
 			launchFn(launcher);
-		},launchDelay || 3000);
+			setInterval(function(){
+				launchFn(launcher);
+			},launchDelay || 3000);
+		});
 	}
-	testLauncher('canvas15',function(launcher){
+	testLauncher('convex pulse',function(launcher){
 		launcher.convexPulse(VeggieFactory.randomFlush(5));
 	});
-	testLauncher('canvas16',function(launcher){
+	testLauncher('concave pulse',function(launcher){
 		launcher.concavePulse(VeggieFactory.randomFlush(5));
 	});
-	testLauncher('canvas17',function(launcher){
+	testLauncher('cascade (left)',function(launcher){
 		launcher.cascadeLeft(VeggieFactory.randomFlush(5));
 	},3500);
-	testLauncher('canvas18',function(launcher){
+	testLauncher('cascade (right)',function(launcher){
 		launcher.cascadeRight(VeggieFactory.randomFlush(5));
 	},3500);
-	testLauncher('canvas19',function(launcher){
+	testLauncher('mortar (left)',function(launcher){
 		launcher.mortarLeft(VeggieFactory.randomFlush(3));
 	},3500);
-	testLauncher('canvas20',function(launcher){
+	testLauncher('mortar (right)',function(launcher){
 		launcher.mortarRight(VeggieFactory.randomFlush(3));
 	},3500);
-	testLauncher('canvas21',function(launcher){
+	testLauncher('bounce',function(launcher){
 		launcher.bounce(VeggieFactory.randomFlush(5));
 	},5500);
-};
+}

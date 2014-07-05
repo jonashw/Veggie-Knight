@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script type="text/javascript" src="src/Convert.js"></script>
+	<script type="text/javascript" src="src/Controls.js"></script>
+	<script type="text/javascript" src="src/Stage.js"></script>
+	<script type="text/javascript" src="src/Veggie.js"></script>
+	<script type="text/javascript" src="src/VeggieFactory.js"></script>
+	<script type="text/javascript" src="src/VeggieLauncher.js"></script>
+	<script type="text/javascript" src="src/GameLoop.js"></script>
+	<script type="text/javascript" src="tests.js"></script>
+	<script>
+		window.onload = function(){
+			var testCase = (function(){
+				//testCase declaration
+				function newTestCaseElement(text){
+					var row = document.createElement('div');
+					row.className = 'row';
+					var leftCol = document.createElement('div');
+					leftCol.className = 'col-md-4';
+					leftCol.innerHTML = text;
+					var rightCol = document.createElement('div');
+					rightCol.className = 'col-md-8';
+					var canvas = document.createElement('canvas');
+					rightCol.appendChild(canvas);
+					row.appendChild(leftCol);
+					row.appendChild(rightCol);
+					return {
+						canvas: canvas,
+						row: row,
+						leftCol: leftCol
+					};
+				}
+				var container = document.getElementById('testCases');
+				var img = document.getElementById('img');
+				return function(title,fn){
+					var el = newTestCaseElement(title);
+					container.appendChild(el.row);
+					fn(el.canvas, img, el.leftCol);
+				};
+			})();
+			runTests(testCase);
+		};
+	</script>
+	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
+</head>
+<body>
+	<div class="container">
+		<div class="page-header">
+			<a href="index.html">Index</a>
+		</div>
+		<div id="testCases"></div>
+		<img id="img" src="veggies.png" style="display:none;"/>
+	</div>
+</body>
+</html>
