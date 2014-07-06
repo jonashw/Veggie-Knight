@@ -1,3 +1,24 @@
+var el;
+function simulateSwipe(canvas,from,to){
+	function mouseEvent(type,pos){
+		var e = jQuery.Event(type,{
+			offsetX: pos.x,
+			offsetY: pos.y
+		});
+		$(canvas).trigger(e);
+	}
+	mouseEvent('mousedown',from);
+	var steps = 50;
+	var dx = (from.x - to.x) / steps;
+	var dy = (from.y - to.y) / steps;
+	for(var i=1; i<=steps; i++){
+		mouseEvent('mousemove',{
+			x: from.x - (dx * i), 
+			y: from.y - (dy * i)
+		});
+	}
+}
+
 function runTests(testCase){
 	testCase('static display of all veggies',function(canvas,img){
 		var stage = new Stage(
@@ -255,9 +276,9 @@ function runTests(testCase){
 		var stage = new Stage(canvas, img, 500, 300);
 		stage.init();
 		stage.draw();
-		for(var i=0; i<=6; i++){
-			var n = i + 2;
-			new ComboNotice(2 * i, 65 * i, 40 * n).draw(ctx);
+		for(var i=0; i<=5; i++){
+			var n = i + 1;
+			new ComboNotice(2 * n, 65 * n, 45 * n).draw(ctx);
 		}
 	});
 
@@ -271,9 +292,12 @@ function runTests(testCase){
 		gameLoop.start();
 		function launch(){
 			launcher.concavePulse(VeggieFactory.fullSet());
+			setTimeout(function(){
+				simulateSwipe(canvas,{x:450,y:70},{x:50,y:110});
+			},1600);
 		}
-		launch();
 		setInterval(launch,3000);
+		launch();
 		controls.on('combo',function(comboSize,x,y){
 			stage.notices.push(new ComboNotice(comboSize,x,y));
 			stage.draw();

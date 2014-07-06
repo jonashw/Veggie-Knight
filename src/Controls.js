@@ -1,4 +1,4 @@
-var Controls = function(canvas,stage,gameLoop,veggieLauncher){
+var Controls = function(canvas,stage,gameLoop){
 	var _obs = {
 		'swipestart':[],
 		'swipemove':[],
@@ -30,18 +30,19 @@ var Controls = function(canvas,stage,gameLoop,veggieLauncher){
 			notifyObs('swipemove',e.offsetX,e.offsetY);
 		}
 		//
-		canvas.addEventListener('mousedown',function(e){
+		var $canvas = $(canvas);
+		$canvas.on('mousedown',function(e){
 			e.preventDefault();
 			_mouseDown = true;
 			startSwipe(e);
 		});
-		canvas.addEventListener('mouseup',function(e){
+		$canvas.on('mouseup',function(e){
 			_mouseDown = false;
 			if(_swipeStarted){
 				stopSwipe(e);
 			}
 		});
-		canvas.addEventListener('mousemove',function(e){
+		$canvas.on('mousemove',function(e){
 			if(!_mouseDown){
 				return true;
 			}
