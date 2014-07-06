@@ -13,10 +13,25 @@ var Controls = function(canvas,stage,gameLoop){
 		});
 	}
 	function setupSwipe(){
+		function getOffset(e){
+			if('originalEvent' in e && 'touches' in e.originalEvent){
+				var t = e.originalEvent.touches[0];
+				return {
+					x: t.pageX - t.target.offsetLeft,
+					y: t.pageY - t.target.offsetTop
+				};
+			} else {
+				return {
+					x: e.offsetX,
+					y: e.offsetY
+				};
+			}
+		}
 		var _mouseDown = false;
 		var _swipeStarted = false;
 		function startSwipe(e){
-			notifyObs('swipestart',e.offsetX,e.offsetY);
+			var o = getOffset(e);
+			notifyObs('swipestart',o.x,o.y);
 			_swipeStarted = true;
 			setTimeout(function(){
 				stopSwipe(e);
@@ -24,25 +39,27 @@ var Controls = function(canvas,stage,gameLoop){
 		}
 		function stopSwipe(e){
 			_swipeStarted = false;
-			notifyObs('swipestop',e.offsetX,e.offsetY);
+			var o = getOffset(e);
+			notifyObs('swipestop',o.x,o.y);
 		}
 		function continueSwipe(e){
-			notifyObs('swipemove',e.offsetX,e.offsetY);
+			var o = getOffset(e);
+			notifyObs('swipemove',o.x,o.y);
 		}
 		//
 		var $canvas = $(canvas);
-		$canvas.on('mousedown',function(e){
+		$canvas.on('mousedown touchstart',function(e){
 			e.preventDefault();
 			_mouseDown = true;
 			startSwipe(e);
 		});
-		$canvas.on('mouseup',function(e){
+		$(document).on('mouseup touchend',function(e){
 			_mouseDown = false;
 			if(_swipeStarted){
 				stopSwipe(e);
 			}
 		});
-		$canvas.on('mousemove',function(e){
+		$canvas.on('mousemove touchmove',function(e){
 			if(!_mouseDown){
 				return true;
 			}
@@ -53,7 +70,7 @@ var Controls = function(canvas,stage,gameLoop){
 			}
 			e.stopPropagation();
 		});
-		document.body.addEventListener('mouseup',function(e){
+		document.body.addEventListener('mouseup touchend',function(e){
 			_mouseDown = false;
 		});
 	}

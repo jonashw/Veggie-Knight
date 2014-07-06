@@ -18,6 +18,9 @@ var GameLoop = function(stage){
 			return !!_interval;
 		},
 		start: function(){
+			if(this.isRunning()){
+				return;
+			}
 			_loop();
 			_interval = setInterval(_loop,20);
 			notify('start');
