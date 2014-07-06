@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="src/Veggie.js"></script>
 	<script type="text/javascript" src="src/VeggieFactory.js"></script>
 	<script type="text/javascript" src="src/VeggieLauncher.js"></script>
+	<script type="text/javascript" src="src/ComboNotice.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
 	<title>Salad Knight</title>
 	<script>
@@ -20,7 +21,7 @@
 				500,300);
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
-			var controls = new Controls(canvas,gameLoop,veggieLauncher);
+			var controls = new Controls(canvas,stage,gameLoop,veggieLauncher);
 			stage.init();
 			controls.init();
 			stage.draw();
@@ -28,6 +29,9 @@
 				stage.getVeggiesAt(x, y).forEach(function(veggie){
 					stage.splitVeggie(veggie);
 				});
+			});
+			controls.on('combo',function(comboSize,x,y){
+				stage.notices.push(new ComboNotice(comboSize,x,y));
 			});
 			function launch(){
 				veggieLauncher.randomLaunch(VeggieFactory.randomSet());
@@ -60,7 +64,7 @@
 		<br>
 		<br>
 		<br>
-		<a href="tests.html">Tests</a>
+		<a href="test.html">Tests</a>
 	</div>
 </body>
 </html>

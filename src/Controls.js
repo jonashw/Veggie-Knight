@@ -1,12 +1,94 @@
-var Controls = function(canvas,gameLoop,veggieLauncher){
+var Controls = function(canvas,stage,gameLoop,veggieLauncher){
 	var _obs = {
 		'swipestart':[],
 		'swipemove':[],
-		'swipestop':[]
+		'swipestop':[],
+		'combo':[]
 	};
-	function notifyObs(evnt,x,y){
+	function notifyObs(evnt){
+		var args = [].slice.call(arguments,1);
 		_obs[evnt].forEach(function(ob){
-			ob(x,y);
+			ob.apply(null,args);
+		});
+	}
+	function setupSwipe(){
+		var _mouseDown = false;
+		var _swipeStarted = false;
+		function startSwipe(e){
+			notifyObs('swipestart',e.offsetX,e.offsetY);
+			_swipeStarted = true;
+			setTimeout(function(){
+				stopSwipe(e);
+			},300);
+		}
+		function stopSwipe(e){
+			_swipeStarted = false;
+			notifyObs('swipestop',e.offsetX,e.offsetY);
+		}
+		function continueSwipe(e){
+			notifyObs('swipemove',e.offsetX,e.offsetY);
+		}
+		//
+		canvas.addEventListener('mousedown',function(e){
+			e.preventDefault();
+			_mouseDown = true;
+			startSwipe(e);
+		});
+		canvas.addEventListener('mouseup',function(e){
+			_mouseDown = false;
+			stopSwipe(e);
+		});
+		canvas.addEventListener('mousemove',function(e){
+			if(!_mouseDown){
+				return true;
+			}
+			if(_swipeStarted){
+				continueSwipe(e);
+			} else {
+				startSwipe(e);
+			}
+			e.stopPropagation();
+		});
+		document.body.addEventListener('mousemove',function(e){
+			if(_swipeStarted){
+				_mouseDown = false;
+				stopSwipe(e);
+			}
+		});
+	}
+	function centerOfVeggies(veggies){
+		if(veggies.length === 0){
+			return {x:0,y:0};
+		}
+		var sums = {x:0, y:0};
+		veggies.forEach(function(veggie){
+			sums.x += veggie.pos.x;
+			sums.y += veggie.pos.y;
+		});
+		return {
+			x: sums.x / veggies.length,
+			y: sums.y / veggies.length
+		};
+	}
+	function setupCombos(self){
+		var swipedVeggies = [];
+		self.on('swipestart swipemove',function(x,y){
+			var touchedVeggies = stage.getVeggiesAt(x, y);
+			touchedVeggies.forEach(function(veggie){
+				stage.splitVeggie(veggie);
+				if(swipedVeggies.indexOf(veggie) === -1){
+					swipedVeggies.push(veggie);
+				}
+			});
+			stage.swipeTrail.push({x:x,y:y});
+		});
+		self.on('swipestop',function(x,y){
+			stage.swipeTrail = [];
+			if(swipedVeggies.length > 2){
+				var center = centerOfVeggies(swipedVeggies);
+				notifyObs('combo',swipedVeggies.length,center.x,center.y);
+			}
+			swipedVeggies = [];
 		});
 	}
 	return {
@@ -18,52 +100,15 @@ var Controls = function(canvas,gameLoop,veggieLauncher){
 					}
 				}
 			});
-			var _mouseDown = false;
-			var _swipeStarted = false;
-			function startSwipe(e){
-				notifyObs('swipestart',e.offsetX,e.offsetY);
-				_swipeStarted = true;
-				setTimeout(function(e){
-					_swipeStarted = false;
-				},300);
+			setupSwipe();
+			if(!!stage){
+				setupCombos(this);
 			}
-			function stopSwipe(e){
-				notifyObs('swipestop',e.offsetX,e.offsetY);
-			}
-			function continueSwipe(e){
-				notifyObs('swipemove',e.offsetX,e.offsetY);
-			}
-
-			canvas.addEventListener('mousedown',function(e){
-				e.preventDefault();
-				_mouseDown = true;
-				startSwipe(e);
-			});
-			canvas.addEventListener('mouseup',function(e){
-				_mouseDown = false;
-				stopSwipe(e);
-			});
-			canvas.addEventListener('mousemove',function(e){
-				if(!_mouseDown){
-					return true;
-				}
-				if(_swipeStarted){
-					continueSwipe(e);
-				} else {
-					stopSwipe(e);
-					startSwipe(e);
-				}
-				e.stopPropagation();
-			});
-			document.body.addEventListener('mousemove',function(e){
-				if(_swipeStarted){
-					_mouseDown = false;
-					stopSwipe(e);
-				}
-			});
 		},
-		on: function(evnt,fn){
-			_obs[evnt].push(fn);
+		on: function(evnts,fn){
+			evnts.split(' ').forEach(function(evnt){
+				_obs[evnt].push(fn);
+			});
 		}
 	};
 };

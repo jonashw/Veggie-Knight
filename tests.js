@@ -104,7 +104,7 @@ function runTests(testCase){
 			img,
 			500,200);
 		stage.init();
-		var controls = new Controls(canvas);
+		var controls = new Controls(canvas,stage);
 		controls.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
@@ -138,7 +138,7 @@ function runTests(testCase){
 			img,
 			500,200);
 		stage.init();
-		var controls = new Controls(canvas);
+		var controls = new Controls(canvas,stage);
 		controls.init();
 		stage.draw();
 		controls.on('swipemove',function(x,y){
@@ -171,12 +171,9 @@ function runTests(testCase){
 				scoreBoard.appendChild(comboRecord);
 			}
 		}
-		var stage = new Stage(
-			canvas,
-			img,
-			500,200);
+		var stage = new Stage(canvas, img, 500,200);
 		stage.init();
-		var controls = new Controls(canvas);
+		var controls = new Controls(canvas,stage);
 		controls.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
@@ -186,7 +183,7 @@ function runTests(testCase){
 		});
 		stage.draw();
 		var swipedVeggies = [];
-		controls.on('swipemove',function(x,y){
+		controls.on('swipestart swipemove',function(x,y){
 			var touchedVeggies = stage.getVeggiesAt(x, y);
 			touchedVeggies.forEach(function(veggie){
 				stage.splitVeggie(veggie);
@@ -195,7 +192,6 @@ function runTests(testCase){
 				}
 			});
 			stage.swipeTrail.push({x:x,y:y});
-			ctx.fillRect(x,y,3,3);
 			stage.draw();
 		});
 		controls.on('swipestop',function(x,y){
@@ -253,4 +249,35 @@ function runTests(testCase){
 	testLauncher('bounce',function(launcher){
 		launcher.bounce(VeggieFactory.randomFlush(5));
 	},5500);
+	
+	testCase('Combo notice',function(canvas,img){
+		var ctx = canvas.getContext('2d');
+		var stage = new Stage(canvas, img, 500, 300);
+		stage.init();
+		stage.draw();
+		for(var i=0; i<=6; i++){
+			var n = i + 2;
+			new ComboNotice(2 * i, 65 * i, 40 * n).draw(ctx);
+		}
+	});
+
+	testCase('A combo causes a visible notice',function(canvas,img){
+		var stage = new Stage(canvas, img, 500,300);
+		var controls = new Controls(canvas,stage);
+		var launcher = new VeggieLauncher(stage);
+		var gameLoop = new GameLoop(stage);
+		stage.init();
+		controls.init();
+		gameLoop.start();
+		function launch(){
+			launcher.concavePulse(VeggieFactory.fullSet());
+		}
+		launch();
+		setInterval(launch,3000);
+		controls.on('combo',function(comboSize,x,y){
+			stage.notices.push(new ComboNotice(comboSize,x,y));
+			stage.draw();
+		});
+		stage.draw();
+	});
 }

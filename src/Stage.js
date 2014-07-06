@@ -21,6 +21,7 @@ var Stage = function(canvas,veggieImg,width,height){
 		},
 		veggies: [],
 		swipeTrail:[],
+		notices: [],
 		getHeight: function(){
 			return _ctx.canvas.height;
 		},
@@ -39,13 +40,25 @@ var Stage = function(canvas,veggieImg,width,height){
 			this.veggies = this.veggies.filter(function(veggie){
 				return veggieOffStage(veggie);
 			});
+			_ctx.save();
+			_ctx.fillStyle = 'rgba(0,0,0,0.5)';
 			this.swipeTrail.forEach(function(swipePoint){
-				_ctx.fillRect(swipePoint.x, swipePoint.y, 5, 5);
+				//_ctx.fillRect(swipePoint.x, swipePoint.y, 5, 5);
+			    _ctx.beginPath();
+			    _ctx.arc(swipePoint.x, swipePoint.y, 3, 0, 2 * Math.PI, false);
+			    _ctx.fill();
 			});
+			this.notices.forEach(function(notice){
+				notice.draw(_ctx);
+			});
+			_ctx.restore();
 		},
 		update: function(){
 			this.veggies.forEach(function(veggie,i){
 				veggie.update();
+			});
+			this.notices = this.notices.filter(function(notice){
+				return !notice.isExpired();
 			});
 		},
 		removeVeggie: function(veggie){
