@@ -9,7 +9,12 @@
 	<script type="text/javascript" src="src/Veggie.js"></script>
 	<script type="text/javascript" src="src/VeggieFactory.js"></script>
 	<script type="text/javascript" src="src/VeggieLauncher.js"></script>
+	<script type="text/javascript" src="src/ComboNotice.js"></script>
+	<script type="text/javascript" src="src/ScoreBoard.js"></script>
+	<script type="text/javascript" src="src/PauseScreen.js"></script>
+	<script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
+	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<title>Salad Knight</title>
 	<script>
 		window.onload = function(){
@@ -17,17 +22,20 @@
 			var stage = new Stage(
 				canvas,
 				document.getElementById('img'),
-				500,300);
+				500,300,
+				document.getElementById('rays'));
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
-			var controls = new Controls(canvas,gameLoop,veggieLauncher);
+			var controls = new Controls(canvas,stage,gameLoop,veggieLauncher);
+			var scoreBoard = new ScoreBoard(controls,stage);
+			var pauseScreen = new PauseScreen(canvas,scoreBoard,gameLoop);
 			stage.init();
 			controls.init();
+			scoreBoard.init();
 			stage.draw();
-			controls.on('swipemove',function(x,y){
-				stage.getVeggiesAt(x, y).forEach(function(veggie){
-					stage.splitVeggie(veggie);
-				});
+			pauseScreen.init();
+			controls.on('combo',function(comboSize,x,y){
+				stage.notices.push(new ComboNotice(comboSize,x,y));
 			});
 			function launch(){
 				veggieLauncher.randomLaunch(VeggieFactory.randomSet());
@@ -40,17 +48,39 @@
 			gameLoop.on('start',function(){
 				launch();
 			});
+			$('#playPause').on('touch click',function(){
+				gameLoop.playPause();
+			});
+			$('#fullscreen').on('touch click',function(){
+				requestFullscreen(canvas);
+			});
+			bgtest();
 		};
+		function requestFullscreen(elem){
+			if (elem.requestFullscreen) {
+			  elem.requestFullscreen();
+			} else if (elem.msRequestFullscreen) {
+			  elem.msRequestFullscreen();
+			} else if (elem.mozRequestFullScreen) {
+			  elem.mozRequestFullScreen();
+			} else if (elem.webkitRequestFullscreen) {
+			  elem.webkitRequestFullscreen();
+			}
+		}
 	</script>
 </head>
 <body>
+	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays" style="display:none;">
 	<div class="container text-center">
-		<img src="SaladKnight.gif">
+		<img src="SaladKnight.gif" class="img-responsive">
 		<hr>
 		<p class="lead">It's like <a href="http://fruitninja.com/">Fruit Ninja</a> but with Veggies</p>
 		<hr>
-
 		<img id="img" src="veggies.png" style="display:none;"/>
+		<button id="playPause">Play/Pause</button>
+		<button id="fullscreen">Full Screen</button>
+		<br>
+		<br>
 		<canvas id="canvas"></canvas>
 		<br>
 		<br>
