@@ -11,25 +11,27 @@
 	<script type="text/javascript" src="src/VeggieLauncher.js"></script>
 	<script type="text/javascript" src="src/ComboNotice.js"></script>
 	<script type="text/javascript" src="src/ScoreBoard.js"></script>
+	<script type="text/javascript" src="src/PauseScreen.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
 	<title>Salad Knight</title>
 	<script>
-		var stage,scoreBoard;
 		window.onload = function(){
 			var canvas = document.getElementById('canvas');
-			stage = new Stage(
+			var stage = new Stage(
 				canvas,
 				document.getElementById('img'),
 				500,300);
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
 			var controls = new Controls(canvas,stage,gameLoop,veggieLauncher);
-			scoreBoard = new ScoreBoard(controls,stage);
+			var scoreBoard = new ScoreBoard(controls,stage);
+			var pauseScreen = new PauseScreen(canvas,scoreBoard,gameLoop);
 			stage.init();
 			controls.init();
 			scoreBoard.init();
 			stage.draw();
+			pauseScreen.init();
 			controls.on('combo',function(comboSize,x,y){
 				stage.notices.push(new ComboNotice(comboSize,x,y));
 			});

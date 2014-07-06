@@ -291,7 +291,7 @@ function runTests(testCase){
 		controls.init();
 		gameLoop.start();
 		function launch(){
-			launcher.concavePulse(VeggieFactory.fullSet());
+			launcher.concavePulse(VeggieFactory.randomSet(5));
 			setTimeout(function(){
 				simulateSwipe(canvas,{x:450,y:70},{x:50,y:110});
 			},1600);
@@ -303,5 +303,25 @@ function runTests(testCase){
 			stage.draw();
 		});
 		stage.draw();
+	});
+	
+	testCase('Pause screen',function(canvas,img){
+		var stage = new Stage(canvas, img, 500, 300);
+		var gameLoop = new GameLoop(stage);
+		var controls = new Controls(canvas,stage,gameLoop);
+		var scoreBoard = new ScoreBoard(controls,stage,gameLoop);
+		var launcher = new VeggieLauncher(stage);
+		var pauseScreen = new PauseScreen(canvas,scoreBoard,gameLoop);
+		stage.init();
+		pauseScreen.init();
+		controls.init();
+		scoreBoard.init();
+		stage.draw();
+		gameLoop.start();
+		function launch(){
+			launcher.concavePulse(VeggieFactory.fullSet());
+		}
+		setInterval(launch,3000);
+		launch();
 	});
 }

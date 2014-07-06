@@ -15,6 +15,18 @@ var Stage = function(canvas,veggieImg,width,height){
 		} 
 		return Math.floor(Math.log(n) / Math.LN10) + 1;
 	}
+	function pairs(a){
+		if(a.length < 2){
+			return [];
+		} else {
+			var ps = []
+			var b = a.slice(1);
+			for(var i=0; i<b.length; i++){
+				ps.push({a: a[i], b: b[i]});
+			}
+			return ps;
+		}
+	}
 	return {
 		init: function(){
 			canvas.style.cursor = 'pointer';
@@ -48,12 +60,13 @@ var Stage = function(canvas,veggieImg,width,height){
 				return veggieOffStage(veggie);
 			});
 			_ctx.save();
-			_ctx.fillStyle = 'rgba(15,175,15,0.5)';
-			this.swipeTrail.forEach(function(swipePoint){
-				//_ctx.fillRect(swipePoint.x, swipePoint.y, 5, 5);
-			    _ctx.beginPath();
-			    _ctx.arc(swipePoint.x, swipePoint.y, 3, 0, 2 * Math.PI, false);
-			    _ctx.fill();
+			_ctx.strokeStyle = 'rgba(15,175,15,0.5)';
+			_ctx.lineWidth = 5;
+			pairs(this.swipeTrail).forEach(function(pointPair){
+				_ctx.beginPath();
+				_ctx.moveTo(pointPair.a.x, pointPair.a.y);
+				_ctx.lineTo(pointPair.b.x, pointPair.b.y);
+				_ctx.stroke();
 			});
 			_ctx.fillStyle = 'rgba(0,0,0,0.5)';
 			this.notices.forEach(function(notice){
