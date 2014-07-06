@@ -21,7 +21,8 @@
 			var stage = new Stage(
 				canvas,
 				document.getElementById('img'),
-				500,300);
+				500,300,
+				document.getElementById('rays'));
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
 			var controls = new Controls(canvas,stage,gameLoop,veggieLauncher);
@@ -50,6 +51,8 @@
 	</script>
 </head>
 <body>
+	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays" style="display:none;">
+	<canvas id="bgtest"></canvas>
 	<div class="container text-center">
 		<img src="SaladKnight.gif">
 		<hr>
