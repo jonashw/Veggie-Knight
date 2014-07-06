@@ -9,6 +9,12 @@ var Stage = function(canvas,veggieImg,width,height){
 		_ctx.fillStyle = '#333';
 		_ctx.strokeRect(0,0, _ctx.canvas.width, _ctx.canvas.height);
 	}
+	function numDigits(n){
+		if(n == 0){
+			return 1;
+		} 
+		return Math.floor(Math.log(n) / Math.LN10) + 1;
+	}
 	return {
 		init: function(){
 			canvas.style.cursor = 'pointer';
@@ -17,11 +23,12 @@ var Stage = function(canvas,veggieImg,width,height){
 			_ctx.canvas.height = height;
 			_img = veggieImg;
 			_scaleFactor = width / _img.width;
-			console.log('canvas width:',width,' image width:',_img.width, ' scale factor:',_scaleFactor);
+			//console.log('canvas width:',width,' image width:',_img.width, ' scale factor:',_scaleFactor);
 		},
 		veggies: [],
 		swipeTrail:[],
 		notices: [],
+		score: null,
 		getHeight: function(){
 			return _ctx.canvas.height;
 		},
@@ -41,16 +48,23 @@ var Stage = function(canvas,veggieImg,width,height){
 				return veggieOffStage(veggie);
 			});
 			_ctx.save();
-			_ctx.fillStyle = 'rgba(0,0,0,0.5)';
+			_ctx.fillStyle = 'rgba(15,175,15,0.5)';
 			this.swipeTrail.forEach(function(swipePoint){
 				//_ctx.fillRect(swipePoint.x, swipePoint.y, 5, 5);
 			    _ctx.beginPath();
 			    _ctx.arc(swipePoint.x, swipePoint.y, 3, 0, 2 * Math.PI, false);
 			    _ctx.fill();
 			});
+			_ctx.fillStyle = 'rgba(0,0,0,0.5)';
 			this.notices.forEach(function(notice){
 				notice.draw(_ctx);
 			});
+			if(this.score != null){
+				_ctx.font = '40px Verdana';
+				var digits = numDigits(this.score);
+				var scoreX = canvas.width - (digits * 25) - 8;
+				_ctx.fillText(this.score, scoreX, 40);
+			}
 			_ctx.restore();
 		},
 		update: function(){

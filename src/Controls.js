@@ -3,7 +3,8 @@ var Controls = function(canvas,stage,gameLoop,veggieLauncher){
 		'swipestart':[],
 		'swipemove':[],
 		'swipestop':[],
-		'combo':[]
+		'combo':[],
+		'slice':[]
 	};
 	function notifyObs(evnt){
 		var args = [].slice.call(arguments,1);
@@ -36,7 +37,9 @@ var Controls = function(canvas,stage,gameLoop,veggieLauncher){
 		});
 		canvas.addEventListener('mouseup',function(e){
 			_mouseDown = false;
-			stopSwipe(e);
+			if(_swipeStarted){
+				stopSwipe(e);
+			}
 		});
 		canvas.addEventListener('mousemove',function(e){
 			if(!_mouseDown){
@@ -49,28 +52,25 @@ var Controls = function(canvas,stage,gameLoop,veggieLauncher){
 			}
 			e.stopPropagation();
 		});
-		document.body.addEventListener('mousemove',function(e){
-			if(_swipeStarted){
-				_mouseDown = false;
-				stopSwipe(e);
-			}
+		document.body.addEventListener('mouseup',function(e){
+			_mouseDown = false;
 		});
-	}
-	function centerOfVeggies(veggies){
-		if(veggies.length === 0){
-			return {x:0,y:0};
-		}
-		var sums = {x:0, y:0};
-		veggies.forEach(function(veggie){
-			sums.x += veggie.pos.x;
-			sums.y += veggie.pos.y;
-		});
-		return {
-			x: sums.x / veggies.length,
-			y: sums.y / veggies.length
-		};
 	}
 	function setupCombos(self){
+		function centerOfVeggies(veggies){
+			if(veggies.length === 0){
+				return {x:0,y:0};
+			}
+			var sums = {x:0, y:0};
+			veggies.forEach(function(veggie){
+				sums.x += veggie.pos.x;
+				sums.y += veggie.pos.y;
+			});
+			return {
+				x: sums.x / veggies.length,
+				y: sums.y / veggies.length
+			};
+		}
 		var swipedVeggies = [];
 		self.on('swipestart swipemove',function(x,y){
 			var touchedVeggies = stage.getVeggiesAt(x, y);
@@ -79,6 +79,7 @@ var Controls = function(canvas,stage,gameLoop,veggieLauncher){
 				if(swipedVeggies.indexOf(veggie) === -1){
 					swipedVeggies.push(veggie);
 				}
+				notifyObs('slice',veggie.type);
 			});
 			stage.swipeTrail.push({x:x,y:y});
 		});
