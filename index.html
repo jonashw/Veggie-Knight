@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<script type="text/javascript" src="src/SwipeEvents.js"></script>
 	<script type="text/javascript" src="src/Controls.js"></script>
 	<script type="text/javascript" src="src/Convert.js"></script>
 	<script type="text/javascript" src="src/GameLoop.js"></script>
@@ -54,7 +55,6 @@
 			$('#fullscreen').on('touch click',function(){
 				requestFullscreen(canvas);
 			});
-			bgtest();
 		};
 		function requestFullscreen(elem){
 			if (elem.requestFullscreen) {
