@@ -18,9 +18,10 @@
 	<script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
 	<script>
 		window.onload = function(){
+			var testCases = [];
 			var testCase = (function(){
 				//testCase declaration
-				function newTestCaseElement(text){
+				function newTestCaseElement(text,testIndex,solo){
 					var row = document.createElement('div');
 					row.className = 'row';
 					var leftCol = document.createElement('div');
@@ -32,6 +33,13 @@
 					rightCol.appendChild(canvas);
 					row.appendChild(leftCol);
 					row.appendChild(rightCol);
+					if(!solo){
+						var testLink = document.createElement('a');
+						testLink.setAttribute('href','?' + testIndex);
+						testLink.innerText = 'Execute this test exclusively';
+						leftCol.appendChild(document.createElement('br'));
+						leftCol.appendChild(testLink);
+					}
 					return {
 						canvas: canvas,
 						row: row,
@@ -41,12 +49,31 @@
 				var container = document.getElementById('testCases');
 				var img = document.getElementById('img');
 				return function(title,fn){
-					var el = newTestCaseElement(title);
-					container.appendChild(el.row);
-					fn(el.canvas, img, el.leftCol);
+					var testIndex = testCases.length;
+					testCases.push(function(solo){
+						var el = newTestCaseElement(title,testIndex,solo);
+						container.appendChild(el.row);
+						fn(el.canvas, img, el.leftCol);
+					});
 				};
 			})();
 			runTests(testCase);
+			//allow tests to be run individually
+			var testIndex = parseInt(window.location.search.replace('?',''));
+			if(isNaN(testIndex)){
+				testCases.forEach(function(tc){
+					tc();
+				});
+			} else if(testIndex >= 0 && testIndex < testCases.length){
+				testCases[testIndex](true);
+				//add link to execute all tests
+				var resetLink = document.createElement('a');
+				resetLink.setAttribute('href',window.location.href.split('?')[0]);
+				resetLink.innerText = 'Execute all tests';
+				var container = document.getElementById('resetLinkContainer');
+				container.innerHTML = '<br><br>Currently executing one test in isolation. ';
+				container.appendChild(resetLink);
+			}
 		};
 	</script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
@@ -55,6 +82,7 @@
 	<div class="container">
 		<div class="page-header">
 			<a href="index.html">Index</a>
+			<span id="resetLinkContainer"></span>
 		</div>
 		<div id="testCases"></div>
 		<img id="img" src="img/veggies.png" style="display:none;"/>

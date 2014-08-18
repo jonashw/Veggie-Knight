@@ -1,3 +1,23 @@
+function interpolateLine(a,b,interval){
+	var deltaX = b.x - a.x;
+	var deltaY = b.y - a.y;
+	var distance = Math.sqrt(Math.pow(Math.abs(deltaX), 2) + Math.pow(Math.abs(deltaY), 2));
+	var fillInCount = Math.floor(distance / interval);
+	if(fillInCount === 0){
+		return [];
+	}
+	var points = [];
+	var dx = deltaX / fillInCount;
+	var dy = deltaY / fillInCount;
+	for(var i=1; i<=fillInCount; i++){ //exclude the starting point, include the ending point
+		points.push({
+			x: Math.floor(a.x + (dx * i)),
+			y: Math.floor(a.y + (dy * i))
+		});
+	}
+	return points;
+}
+
 var Controls = function(canvas,stage,gameLoop){
 	var _obs = {
 		'combo':[],
@@ -12,8 +32,15 @@ var Controls = function(canvas,stage,gameLoop){
 	function setupCombos(self){
 		SwipeEvents(canvas);
 		var swipedVeggies = [];
+		var lastSwipePoint;
 		$(canvas).on('swipestart swipemove',function(e,pos){
-			var touchedVeggies = stage.getVeggiesAt(pos.x, pos.y);
+			var swipePoints = [pos];
+			if(lastSwipePoint){
+				//interpolate the line between the two points, increasing the swipe's resolution.
+				//this helps prevent swipe misses, where a swipe goes over a veggie without slicing it.
+				swipePoints = swipePoints.concat(interpolateLine(lastSwipePoint, pos, 5));
+			}
+			var touchedVeggies = stage.getVeggiesAtPoints(swipePoints);
 			touchedVeggies.forEach(function(veggie){
 				stage.splitVeggie(veggie);
 				if(swipedVeggies.indexOf(veggie) === -1){
@@ -22,6 +49,7 @@ var Controls = function(canvas,stage,gameLoop){
 				notifyObs('slice',veggie.type);
 			});
 			stage.swipeTrail.push(pos);
+			lastSwipePoint = pos;
 		});
 		$(canvas).on('swipestop',function(x,y){
 			stage.swipeTrail = [];
@@ -30,6 +58,7 @@ var Controls = function(canvas,stage,gameLoop){
 				notifyObs('combo',swipedVeggies.length,center.x,center.y);
 			}
 			swipedVeggies = [];
+			lastSwipePoint = null;
 		});
 		function centerOfVeggies(veggies){
 			if(veggies.length === 0){
