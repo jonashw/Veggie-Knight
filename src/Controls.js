@@ -1,8 +1,25 @@
+function interpolateLine(a,b,interval){
+	var deltaX = b.x - a.x;
+	var deltaY = b.y - a.y;
+	var distance = Math.sqrt(Math.pow(Math.abs(deltaX), 2) + Math.pow(Math.abs(deltaY), 2));
+	var fillInCount = Math.floor(distance / interval);
+	if(fillInCount === 0){
+		return [];
+	}
+	var points = [];
+	var dx = deltaX / fillInCount;
+	var dy = deltaY / fillInCount;
+	for(var i=1; i<=fillInCount; i++){ //exclude the starting point, include the ending point
+		points.push({
+			x: Math.floor(a.x + (dx * i)),
+			y: Math.floor(a.y + (dy * i))
+		});
+	}
+	return points;
+}
+
 var Controls = function(canvas,stage,gameLoop){
 	var _obs = {
-		'swipestart':[],
-		'swipemove':[],
-		'swipestop':[],
 		'combo':[],
 		'slice':[]
 	};
@@ -12,69 +29,37 @@ var Controls = function(canvas,stage,gameLoop){
 			ob.apply(null,args);
 		});
 	}
-	function setupSwipe(){
-		function getOffset(e){
-			if('originalEvent' in e && 'touches' in e.originalEvent){
-				var t = e.originalEvent.touches[0];
-				return {
-					x: t.pageX - t.target.offsetLeft,
-					y: t.pageY - t.target.offsetTop
-				};
-			} else {
-				return {
-					x: e.offsetX,
-					y: e.offsetY
-				};
-			}
-		}
-		var _mouseDown = false;
-		var _swipeStarted = false;
-		function startSwipe(e){
-			var o = getOffset(e);
-			notifyObs('swipestart',o.x,o.y);
-			_swipeStarted = true;
-			setTimeout(function(){
-				stopSwipe(e);
-			},300);
-		}
-		function stopSwipe(e){
-			_swipeStarted = false;
-			var o = getOffset(e);
-			notifyObs('swipestop',o.x,o.y);
-		}
-		function continueSwipe(e){
-			var o = getOffset(e);
-			notifyObs('swipemove',o.x,o.y);
-		}
-		//
-		var $canvas = $(canvas);
-		$canvas.on('mousedown touchstart',function(e){
-			e.preventDefault();
-			_mouseDown = true;
-			startSwipe(e);
-		});
-		$(document).on('mouseup touchend',function(e){
-			_mouseDown = false;
-			if(_swipeStarted){
-				stopSwipe(e);
-			}
-		});
-		$canvas.on('mousemove touchmove',function(e){
-			if(!_mouseDown){
-				return true;
-			}
-			if(_swipeStarted){
-				continueSwipe(e);
-			} else {
-				startSwipe(e);
-			}
-			e.stopPropagation();
-		});
-		document.body.addEventListener('mouseup touchend',function(e){
-			_mouseDown = false;
-		});
-	}
 	function setupCombos(self){
+		SwipeEvents(canvas);
+		var swipedVeggies = [];
+		var lastSwipePoint;
+		$(canvas).on('swipestart swipemove',function(e,pos){
+			var swipePoints = [pos];
+			if(lastSwipePoint){
+				//interpolate the line between the two points, increasing the swipe's resolution.
+				//this helps prevent swipe misses, where a swipe goes over a veggie without slicing it.
+				swipePoints = swipePoints.concat(interpolateLine(lastSwipePoint, pos, 5));
+			}
+			var touchedVeggies = stage.getVeggiesAtPoints(swipePoints);
+			touchedVeggies.forEach(function(veggie){
+				stage.splitVeggie(veggie);
+				if(swipedVeggies.indexOf(veggie) === -1){
+					swipedVeggies.push(veggie);
+				}
+				notifyObs('slice',veggie.type);
+			});
+			stage.swipeTrail.push(pos);
+			lastSwipePoint = pos;
+		});
+		$(canvas).on('swipestop',function(x,y){
+			stage.swipeTrail = [];
+			if(swipedVeggies.length > 2){
+				var center = centerOfVeggies(swipedVeggies);
+				notifyObs('combo',swipedVeggies.length,center.x,center.y);
+			}
+			swipedVeggies = [];
+			lastSwipePoint = null;
+		});
 		function centerOfVeggies(veggies){
 			if(veggies.length === 0){
 				return {x:0,y:0};
@@ -89,26 +74,6 @@ var Controls = function(canvas,stage,gameLoop){
 				y: sums.y / veggies.length
 			};
 		}
-		var swipedVeggies = [];
-		self.on('swipestart swipemove',function(x,y){
-			var touchedVeggies = stage.getVeggiesAt(x, y);
-			touchedVeggies.forEach(function(veggie){
-				stage.splitVeggie(veggie);
-				if(swipedVeggies.indexOf(veggie) === -1){
-					swipedVeggies.push(veggie);
-				}
-				notifyObs('slice',veggie.type);
-			});
-			stage.swipeTrail.push({x:x,y:y});
-		});
-		self.on('swipestop',function(x,y){
-			stage.swipeTrail = [];
-			if(swipedVeggies.length > 2){
-				var center = centerOfVeggies(swipedVeggies);
-				notifyObs('combo',swipedVeggies.length,center.x,center.y);
-			}
-			swipedVeggies = [];
-		});
 	}
 	return {
 		init: function(){
@@ -119,7 +84,6 @@ var Controls = function(canvas,stage,gameLoop){
 					}
 				}
 			});
-			setupSwipe();
 			if(!!stage){
 				setupCombos(this);
 			}

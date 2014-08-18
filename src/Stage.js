@@ -132,6 +132,14 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 			return this.veggies.filter(function(veggie){
 				return veggie.whole && veggie.containsPoint(x, y, _scaleFactor);
 			});
+		},
+		getVeggiesAtPoints: function(points){
+			return this.veggies.filter(function(veggie){
+				return veggie.whole
+					&& points.some(function(point){
+						return veggie.containsPoint(point.x, point.y, _scaleFactor);
+					});
+			});
 		}
 	};
 };

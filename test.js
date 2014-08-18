@@ -1,5 +1,5 @@
 var el;
-function simulateSwipe(canvas,from,to){
+function simulateSwipe(canvas,from,to,steps){
 	function mouseEvent(type,pos){
 		var e = jQuery.Event(type,{
 			offsetX: pos.x,
@@ -8,7 +8,7 @@ function simulateSwipe(canvas,from,to){
 		$(canvas).trigger(e);
 	}
 	mouseEvent('mousedown',from);
-	var steps = 50;
+	var steps = steps || 50;
 	var dx = (from.x - to.x) / steps;
 	var dy = (from.y - to.y) / steps;
 	for(var i=1; i<=steps; i++){
@@ -92,7 +92,6 @@ function runTests(testCase){
 		});
 		stage.draw();
 		canvas.addEventListener('click',function(e){
-			//console.log('click on canvas:', e.offsetX, e.offsetY);
 			var clickedVeggies = stage.getVeggiesAt(e.offsetX, e.offsetY)
 			if(clickedVeggies.length == 0){
 				console.log('no veggies clicked');
@@ -100,9 +99,7 @@ function runTests(testCase){
 				var clickedVeggieNames = clickedVeggies.map(function(veggie){
 					return veggie.type;
 				});
-				console.log('clicked veggies:',clickedVeggieNames);
 				clickedVeggies.forEach(function(veggie){
-					console.log(veggie);
 					stage.splitVeggie(veggie);
 				});
 				stage.draw();
@@ -134,13 +131,14 @@ function runTests(testCase){
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
-		controls.on('swipemove',function(x,y){
-			stage.getVeggiesAt(x, y).forEach(function(veggie){
+		SwipeEvents(canvas);
+		$(canvas).on('swipemove',function(e,pos){
+			stage.getVeggiesAt(pos.x, pos.y).forEach(function(veggie){
 				stage.splitVeggie(veggie);
 			});
 			stage.draw();
 		});
-		controls.on('swipestop',function(x,y){
+		$(canvas).on('swipestop',function(e,pos){
 			var wholeVeggiesLeft = stage.veggies.filter(function(veggie){
 				return veggie.whole;
 			});
@@ -159,13 +157,14 @@ function runTests(testCase){
 			img,
 			500,200);
 		stage.init();
+		SwipeEvents(canvas);
 		var controls = new Controls(canvas,stage);
 		controls.init();
 		stage.draw();
-		controls.on('swipemove',function(x,y){
-			ctx.fillRect(x,y,3,3);
+		$(canvas).on('swipemove',function(e,pos){
+			ctx.fillRect(pos.x,pos.y,3,3);
 		});
-		controls.on('swipestop',function(x,y){
+		$(canvas).on('swipestop',function(e,pos){
 			stage.draw();
 		});
 	});
@@ -204,18 +203,18 @@ function runTests(testCase){
 		});
 		stage.draw();
 		var swipedVeggies = [];
-		controls.on('swipestart swipemove',function(x,y){
-			var touchedVeggies = stage.getVeggiesAt(x, y);
+		$(canvas).on('swipestart swipemove',function(e,pos){
+			var touchedVeggies = stage.getVeggiesAt(pos.x, pos.y);
 			touchedVeggies.forEach(function(veggie){
 				stage.splitVeggie(veggie);
 				if(swipedVeggies.indexOf(veggie) === -1){
 					swipedVeggies.push(veggie);
 				}
 			});
-			stage.swipeTrail.push({x:x,y:y});
+			stage.swipeTrail.push(pos);
 			stage.draw();
 		});
-		controls.on('swipestop',function(x,y){
+		$(canvas).on('swipestop',function(e,pos){
 			stage.swipeTrail = [];
 			logCombo(swipedVeggies.length);
 			swipedVeggies = [];
@@ -302,6 +301,25 @@ function runTests(testCase){
 			stage.notices.push(new ComboNotice(comboSize,x,y));
 			stage.draw();
 		});
+		stage.draw();
+	});
+
+	testCase('swipe resolution is such that all veggies are sliced between two swipe points',function(canvas,img){
+		var stage = new Stage(canvas, img, 500,300);
+		var controls = new Controls(canvas,stage);
+		var launcher = new VeggieLauncher(stage);
+		var gameLoop = new GameLoop(stage);
+		stage.init();
+		controls.init();
+		gameLoop.start();
+		function launch(){
+			launcher.concavePulse(VeggieFactory.flush('bellpepper',5));
+			setTimeout(function(){
+				simulateSwipe(canvas,{x:450,y:100},{x:50,y:100},1);
+			},1600);
+		}
+		setInterval(launch,3000);
+		launch();
 		stage.draw();
 	});
 	

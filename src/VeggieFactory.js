@@ -153,6 +153,15 @@ var VeggieFactory = (function(){
 			}
 			return veggies;
 		},
+		flush: function(veggieKey,n){
+			var veggies = [];
+			var n = n || Math.floor(Math.random() * 5) + 1; //no more than 6 at once
+			var sprite = sprites[veggieKey];
+			for(var i=0; i<n; i++){
+				veggies.push(new Veggie(veggieKey,sprite,true));
+			}
+			return veggies;
+		},
 		fullSplitSet: function(){
 			var veggies = [];
 			spriteKeys.forEach(function(k){
