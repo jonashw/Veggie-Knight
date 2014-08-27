@@ -269,6 +269,34 @@ function runTests(testCase){
 	testLauncher('bounce',function(launcher){
 		launcher.bounce(VeggieFactory.randomFlush(5));
 	},5500);
+	testLauncher('frenzy (left)',function(launcher){
+		launcher.frenzyLeft(VeggieFactory.randomFlush(6));
+	},2000);
+	testLauncher('frenzy (right)',function(launcher){
+		launcher.frenzyRight(VeggieFactory.randomFlush(6));
+	},2000);
+	testLauncher('frenzy (both)',function(launcher){
+		launcher.frenzyLeft(VeggieFactory.randomSet(6));
+		launcher.frenzyRight(VeggieFactory.randomSet(6));
+	},2000);
+
+	testCase('Frenzy mode (3 seconds, every 8 seconds)', function(canvas,img){
+		var ctx = canvas.getContext('2d');
+		var stage = new Stage(
+			canvas,
+			img,
+			500,300);
+		stage.init();
+		var launcher = new VeggieLauncher(stage);
+		var gameLoop = new GameLoop(stage);
+		stage.draw();
+		gameLoop.start();
+		function frenzy(){
+			FrenzyMode(launcher, 3000);
+		}
+		setInterval(frenzy,8000);
+		frenzy();
+	});
 	
 	testCase('Combo notice',function(canvas,img){
 		var ctx = canvas.getContext('2d');
@@ -323,7 +351,7 @@ function runTests(testCase){
 		stage.draw();
 	});
 	
-	testCase('Pause screen',function(canvas,img){
+	testCase('Pause screen (press Space Bar)',function(canvas,img){
 		var stage = new Stage(canvas, img, 500, 300);
 		var gameLoop = new GameLoop(stage);
 		var controls = new Controls(canvas,stage,gameLoop);
