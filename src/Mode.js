@@ -1,6 +1,7 @@
-function Mode(gameLoop,launchFn,launchInterval){
+function Mode(gameLoop,launchFn,launchInterval,bgImg){
 	var _interval;
 	return {
+		bgImg: bgImg,
 		start: function(){
 			launchFn();
 			_interval = setInterval(function(){

@@ -5,14 +5,14 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 		var s = 1000;
 		var ss = s / 1;
 		return function(){
-			if(!bgImg){
+			if(!self.bgImg){
 				return;
 			}
 			_ctx.save();
 			_ctx.translate(s/4, s/4);
 			_ctx.rotate(Convert.degToRad(bgRot));
 			_ctx.drawImage(
-				bgImg,
+				self.bgImg,
 				0,
 				0,
 				s,
@@ -51,7 +51,8 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 			return ps;
 		}
 	}
-	return {
+	var self = {
+		bgImg: bgImg,
 		init: function(){
 			canvas.style.cursor = 'pointer';
 			_ctx = canvas.getContext('2d');
@@ -142,4 +143,5 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 			});
 		}
 	};
+	return self;
 };

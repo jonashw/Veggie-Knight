@@ -1,4 +1,4 @@
-function FrenzyMode(gameLoop, launcher, totalDuration){
+function FrenzyMode(gameLoop, launcher, totalDuration, bgImg){
 	var _interval;
 	var unitDuration = 2000;
 	function launchSide(launchFnKey,timeLeft){
@@ -22,5 +22,5 @@ function FrenzyMode(gameLoop, launcher, totalDuration){
 		setTimeout(function(){
 			launchSide(keys[1]);
 		},500);
-	}, 6000);
+	}, 6000, bgImg);
 }

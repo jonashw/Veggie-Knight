@@ -24,11 +24,15 @@
 	<script>
 		window.onload = function(){
 			var canvas = document.getElementById('canvas');
+			var bgImg = {
+				green: document.getElementById('rays-green'),
+				blue: document.getElementById('rays-blue')
+			};
 			var stage = new Stage(
 				canvas,
 				document.getElementById('img'),
 				500,300,
-				document.getElementById('rays'));
+				bgImg.green);
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
 			var controls = new Controls(canvas,stage,gameLoop,veggieLauncher);
@@ -42,12 +46,13 @@
 			controls.on('combo',function(comboSize,x,y){
 				stage.notices.push(new ComboNotice(comboSize,x,y));
 			});
-			var normalMode = new NormalMode(gameLoop,veggieLauncher);
-			var frenzyMode = new FrenzyMode(gameLoop,veggieLauncher);
+			var normalMode = new NormalMode(gameLoop,veggieLauncher,bgImg.green);
+			var frenzyMode = new FrenzyMode(gameLoop,veggieLauncher,2000,bgImg.blue);
 			var currentMode = normalMode;
 			function toMode(mode){
 				currentMode.stop();
 				currentMode = mode;
+				stage.bgImg = currentMode.bgImg;
 				currentMode.start();
 			}
 			function toggleMode(){
@@ -86,7 +91,8 @@
 	</script>
 </head>
 <body>
-	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays" style="display:none;">
+	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays-green" style="display:none;">
+	<img src="img/bg-pinwheel-rays-blue-1000.png" id="rays-blue" style="display:none;">
 	<div class="container text-center">
 		<img src="img/VeggieKnight.gif" class="img-responsive" style="margin:0 auto;">
 		<a href="https://github.com/jonashw/Veggie-Knight/">View project on GitHub</a>
