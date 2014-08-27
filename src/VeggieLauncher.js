@@ -93,6 +93,20 @@ var VeggieLauncher = function(stage){
 			if(right) veggie.vel.x = -veggie.vel.x;
 		});
 	}
+	function bouncedVeggies(veggies){
+		centerD(1,veggies);
+		// (2): 0 1
+		// (4): 0 3 1 2 
+		// (5): 0 4 1 3 2
+		// (6): 0 5 1 4 2 3
+		var veggies2 = [];
+		var veggiesCopy = veggies.slice(0);
+		while(veggiesCopy.length){
+			veggies2.push(veggiesCopy.shift());
+			veggiesCopy.reverse();
+		}
+		return veggies2;
+	}
 	//
 	var launchMethodNames = [
 		'convexPulse',
@@ -120,19 +134,19 @@ var VeggieLauncher = function(stage){
 			launch(veggies);
 		},
 		bounce: function(veggies){
-			centerD(1,veggies);
-			// (2): 0 1
-			// (4): 0 3 1 2 
-			// (5): 0 4 1 3 2
-			// (6): 0 5 1 4 2 3
-			var veggies2 = [];
-			var veggiesCopy = veggies.slice(0);
-			while(veggiesCopy.length){
-				veggies2.push(veggiesCopy.shift());
-				veggiesCopy.reverse();
-			}
-			launchAsync(veggies2,300,function(veggie){
+			launchAsync(bouncedVeggies(veggies),300,function(veggie){
 				veggie.vel.y = 6.5;
+			});
+		},
+		bounce: function(veggies){
+			launchAsync(bouncedVeggies(veggies),300,function(veggie){
+				veggie.vel.y = 6.5;
+			});
+		},
+		rain: function(veggies){
+			launchAsync(bouncedVeggies(veggies),300,function(veggie){
+				veggie.pos.y = -50;
+				veggie.vel.y = -2;
 			});
 		},
 		cascadeRight: cascade.bind(null,false),

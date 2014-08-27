@@ -271,6 +271,9 @@ function runTests(testCase){
 	testLauncher('bounce',function(launcher){
 		launcher.bounce(VeggieFactory.randomFlush(5));
 	},5500);
+	testLauncher('rain',function(launcher){
+		launcher.rain(VeggieFactory.randomFlush(6));
+	},5000);
 	testLauncher('frenzy (left)',function(launcher){
 		launcher.frenzyLeft(VeggieFactory.randomFlush(6));
 	},2000);
