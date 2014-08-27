@@ -111,26 +111,26 @@ var VeggieFactory = (function(){
 			splitSeparation: 48
 		},
 		eggplant: {
-			x: 1785,
-			y: 17,
-			w: 260,
-			h: 379,
+			x: 1756,
+			y: 1,
+			w: 164,
+			h: 337,
 	        splits: [
 				{
-					x: 2045,
-					y: 12,
-					w: 162,
-					h: 317
+					x: 1974,
+					y: 2,
+					w: 153,
+					h: 237
 				},
 				{
-					x: 2216,
-					y: 225,
-					w: 246,
-					h: 192
+					x: 1952,
+					y: 242,
+					w: 185,
+					h: 178
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 48
+			splitSeparation: 60
 		}
 	};
 	var spriteKeys = (function(){

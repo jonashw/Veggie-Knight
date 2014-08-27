@@ -55,12 +55,13 @@ function runTests(testCase){
 			var stage = new Stage(
 				canvas,
 				img,
-				500,200);
+				500,250);
 			stage.init();
 			var veggies = new VeggieFactory.fullSet();
+			var veggiesPerRow = 5;
 			veggies.forEach(function(veggie,i){
-				veggie.pos.x = 100 * (i + 0.5);
-				veggie.pos.y = 80;
+				veggie.pos.x = 100 * ((i % veggiesPerRow) + 0.5);
+				veggie.pos.y = 70 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
 				stage.veggies.push(veggie);
 				veggie.rot = 45 * n;
 			});
@@ -87,7 +88,7 @@ function runTests(testCase){
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
@@ -127,7 +128,7 @@ function runTests(testCase){
 		controls.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
@@ -198,7 +199,7 @@ function runTests(testCase){
 		controls.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
