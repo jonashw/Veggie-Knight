@@ -109,6 +109,28 @@ var VeggieFactory = (function(){
 			],
 			splitsAlongX:true,
 			splitSeparation: 48
+		},
+		eggplant: {
+			x: 1785,
+			y: 17,
+			w: 260,
+			h: 379,
+	        splits: [
+				{
+					x: 2045,
+					y: 12,
+					w: 162,
+					h: 317
+				},
+				{
+					x: 2216,
+					y: 225,
+					w: 246,
+					h: 192
+				}
+			],
+			splitsAlongX:true,
+			splitSeparation: 48
 		}
 	};
 	var spriteKeys = (function(){
@@ -130,6 +152,9 @@ var VeggieFactory = (function(){
 					new Veggie(k,sprites[k],true));
 			});
 			return veggies;
+		},
+		one: function(key){
+			return new Veggie(key,sprites[key],true);
 		},
 		random: function(){
 			var k = randomSpriteKey();

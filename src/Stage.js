@@ -59,7 +59,7 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 			_ctx.canvas.width = width;
 			_ctx.canvas.height = height;
 			_img = veggieImg;
-			_scaleFactor = width / _img.width;
+			_scaleFactor = 0.27;
 			//console.log('canvas width:',width,' image width:',_img.width, ' scale factor:',_scaleFactor);
 		},
 		veggies: [],

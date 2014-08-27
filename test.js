@@ -28,7 +28,7 @@ function runTests(testCase){
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
@@ -41,9 +41,10 @@ function runTests(testCase){
 			500,200);
 		stage.init();
 		var veggies = new VeggieFactory.fullSplitSet();
+		var veggiesPerRow = 10;
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 50 * (i + .5);
-			veggie.pos.y = 80;
+			veggie.pos.x = 50 * ((i % veggiesPerRow) + 0.5);
+			veggie.pos.y = 60 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
