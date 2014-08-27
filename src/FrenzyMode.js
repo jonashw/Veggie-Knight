@@ -1,20 +1,26 @@
-function FrenzyMode(launcher, totalDuration){
+function FrenzyMode(gameLoop, launcher, totalDuration){
+	var _interval;
 	var unitDuration = 2000;
-	function launch(launchFnKey,timeLeft){
+	function launchSide(launchFnKey,timeLeft){
 		var veggies = VeggieFactory.randomSet(Random.range(6,10));
 		launcher[launchFnKey](veggies);
 		var _timeLeft = timeLeft == null
-			? (totalDuration || 10000)
+			? (totalDuration || unitDuration)
 			: timeLeft;
-		if(_timeLeft <= 0) return;
+		if(_timeLeft <= 0){
+			return;
+		}
 		setTimeout(function(){
-			launch(launchFnKey, _timeLeft - unitDuration - unitDuration);
+			launchSide(launchFnKey, _timeLeft - unitDuration);
 		}, unitDuration);
 	}
-	//set things in motion, one side lagging slightly behind the other
-	var keys = Random.shuffle(['frenzyLeft','frenzyRight']);
-	launch(keys[0]);
-	setTimeout(function(){
-		launch(keys[1]);
-	},500);
+
+	return new Mode(gameLoop,function(){
+		//set things in motion, one side lagging slightly behind the other
+		var keys = Random.shuffle(['frenzyLeft','frenzyRight']);
+		launchSide(keys[0]);
+		setTimeout(function(){
+			launchSide(keys[1]);
+		},500);
+	}, 6000);
 }

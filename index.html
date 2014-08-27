@@ -14,6 +14,8 @@
 	<script type="text/javascript" src="src/ScoreBoard.js"></script>
 	<script type="text/javascript" src="src/PauseScreen.js"></script>
 	<script type="text/javascript" src="src/Random.js"></script>
+	<script type="text/javascript" src="src/Mode.js"></script>
+	<script type="text/javascript" src="src/NormalMode.js"></script>
 	<script type="text/javascript" src="src/FrenzyMode.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
@@ -40,22 +42,34 @@
 			controls.on('combo',function(comboSize,x,y){
 				stage.notices.push(new ComboNotice(comboSize,x,y));
 			});
-			function launch(){
-				veggieLauncher.randomLaunch(VeggieFactory.randomSet());
+			var normalMode = new NormalMode(gameLoop,veggieLauncher);
+			var frenzyMode = new FrenzyMode(gameLoop,veggieLauncher);
+			var currentMode = normalMode;
+			function toMode(mode){
+				currentMode.stop();
+				currentMode = mode;
+				currentMode.start();
 			}
-			setInterval(function(){
-				if(gameLoop.isRunning()){
-					launch();
-				}
-			}, 2500)
+			function toggleMode(){
+				var nextMode = currentMode == normalMode
+					? frenzyMode
+					: normalMode;
+				toMode(nextMode);
+			}
+			gameLoop.on('stop',function(){
+				currentMode.stop();
+			});
 			gameLoop.on('start',function(){
-				launch();
+				currentMode.start();
 			});
 			$('#playPause').on('touch click',function(){
 				gameLoop.playPause();
 			});
 			$('#fullscreen').on('touch click',function(){
 				requestFullscreen(canvas);
+			});
+			$('#toggleMode').on('touch click',function(){
+				toggleMode();
 			});
 		};
 		function requestFullscreen(elem){
@@ -82,6 +96,7 @@
 		<img id="img" src="img/veggies.png" style="display:none;"/>
 		<button id="playPause">Play/Pause</button>
 		<button id="fullscreen">Full Screen</button>
+		<button id="toggleMode">Toggle Between Normal/Frenzy Modes</button>
 		<br>
 		<br>
 		<canvas id="canvas"></canvas>
