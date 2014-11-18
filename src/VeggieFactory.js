@@ -20,7 +20,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 55
+			splitSeparation: 75
 		},
 		bellpepper: {
 			x: 355,
@@ -42,7 +42,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 70
+			splitSeparation: 95
 		},
 		broccoli: {
 			x: 730,
@@ -51,9 +51,9 @@ var VeggieFactory = (function(){
 			h: 255,
 	        splits: [
 				{
-					x: 944,
+					x: 924,
 					y: 20,
-					w: 100,
+					w: 120,
 					h: 260
 				},
 				{
@@ -64,7 +64,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:false,
-			splitSeparation: 45
+			splitSeparation: 55
 		},
 		squash: {
 			x: 1155,
@@ -86,13 +86,13 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 75
+			splitSeparation: 105
 		},
 		celery: {
 			x: 1435,
-			y: 10,
+			y: 30,
 			w: 170,
-			h: 410,
+			h: 420,
 	        splits: [
 				{
 					x: 1640,
@@ -108,7 +108,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 90
+			splitSeparation: 110
 		},
 		eggplant: {
 			x: 1826,
@@ -130,7 +130,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 90
+			splitSeparation: 120
 		},
 		lettuce: {
 			x: 2615,
@@ -152,7 +152,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 70
+			splitSeparation: 100
 		},
 		potato: {
 			x: 2270,
@@ -163,18 +163,18 @@ var VeggieFactory = (function(){
 				{
 					x: 2261,
 					y: 221,
-					w: 130,
+					w: 150,
 					h: 206
 				},
 				{
-					x: 2431,
+					x: 2421,
 					y: 221,
-					w: 145,
+					w: 155,
 					h: 206
 				}
 			],
 			splitsAlongX:false,
-			splitSeparation: 55
+			splitSeparation: 75
 		},
 		avocado: {
 			x: 3136,
@@ -196,7 +196,7 @@ var VeggieFactory = (function(){
 				}
 			],
 			splitsAlongX:false,
-			splitSeparation: 55
+			splitSeparation: 75
 		}
 	};
 	var spriteKeys = (function(){
