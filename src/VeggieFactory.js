@@ -3,112 +3,200 @@ var VeggieFactory = (function(){
 		onion: {
 			x: 0,
 			y: 0,
-			w: 155,
-			h: 200,
+			w: 170,
+			h: 220,
 	        splits: [
 				{
 					x: 173,
 					y: 4,
-					w: 151,
-					h: 159
+					w: 170,
+					h: 170
 				},
 				{
 					x: 171,
-					y: 171,
-					w: 158,
-					h: 134
-				}
-			],
-			splitsAlongX:true,
-			splitSeparation: 44
-		},
-		bellpepper: {
-			x: 355,
-			y: 13,
-			w: 150,
-			h: 250,
-	        splits: [
-				{
-					x: 555,
-					y: 15,
-					w: 145,
-					h: 213
-				},
-				{
-					x: 538,
-					y: 228,
-					w: 144,
-					h: 174
+					y: 174,
+					w: 170,
+					h: 150
 				}
 			],
 			splitsAlongX:true,
 			splitSeparation: 55
 		},
-		broccoli: {
-			x: 730,
-			y: 3,
-			w: 170,
-			h: 250,
+		bellpepper: {
+			x: 355,
+			y: 13,
+			w: 155,
+			h: 260,
 	        splits: [
 				{
-					x: 924,
-					y: 20,
-					w: 100,
-					h: 246
+					x: 535,
+					y: 15,
+					w: 155,
+					h: 230
 				},
 				{
-					x: 1042,
-					y: 10,
-					w: 88,
-					h: 257
-				}
-			],
-			splitsAlongX:false,
-			splitSeparation: 32
-		},
-		squash: {
-			x: 1155,
-			y: 3,
-			w: 85,
-			h: 280,
-	        splits: [
-				{
-					x: 1255,
-					y: 8,
-					w: 74,
-					h: 176
-				},
-				{
-					x: 1258,
-					y: 191,
-					w: 71,
-					h: 151
+					x: 535,
+					y: 248,
+					w: 155,
+					h: 174
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 50
+			splitSeparation: 70
+		},
+		broccoli: {
+			x: 730,
+			y: 3,
+			w: 183,
+			h: 255,
+	        splits: [
+				{
+					x: 944,
+					y: 20,
+					w: 100,
+					h: 260
+				},
+				{
+					x: 1052,
+					y: 10,
+					w: 100,
+					h: 270
+				}
+			],
+			splitsAlongX:false,
+			splitSeparation: 45
+		},
+		squash: {
+			x: 1155,
+			y: 15,
+			w: 85,
+			h: 300,
+	        splits: [
+				{
+					x: 1260,
+					y: 8,
+					w: 84,
+					h: 160
+				},
+				{
+					x: 1262,
+					y: 180,
+					w: 80,
+					h: 233
+				}
+			],
+			splitsAlongX:true,
+			splitSeparation: 75
 		},
 		celery: {
 			x: 1435,
 			y: 10,
 			w: 170,
-			h: 400,
+			h: 410,
 	        splits: [
 				{
-					x: 1627,
-					y: 19,
-					w: 101,
-					h: 189
+					x: 1640,
+					y: 40,
+					w: 175,
+					h: 205
 				},
 				{
-					x: 1628,
-					y: 241,
-					w: 96,
-					h: 130
+					x: 1670,
+					y: 251,
+					w: 120,
+					h: 200
 				}
 			],
 			splitsAlongX:true,
-			splitSeparation: 48
+			splitSeparation: 90
+		},
+		eggplant: {
+			x: 1826,
+			y: 1,
+			w: 197,
+			h: 446,
+	        splits: [
+				{
+					x: 2030,
+					y: 12,
+					w: 191,
+					h: 249
+				},
+				{
+					x: 2030,
+					y: 260,
+					w: 185,
+					h: 240
+				}
+			],
+			splitsAlongX:true,
+			splitSeparation: 90
+		},
+		lettuce: {
+			x: 2615,
+			y: 100,
+			w: 230,
+			h: 230,
+	        splits: [
+				{
+					x: 2873,
+					y: 23,
+					w: 233,
+					h: 214
+				},
+				{
+					x: 2873,
+					y: 243,
+					w: 233,
+					h: 214
+				}
+			],
+			splitsAlongX:true,
+			splitSeparation: 70
+		},
+		potato: {
+			x: 2270,
+			y: 11,
+			w: 198,
+			h: 210,
+	        splits: [
+				{
+					x: 2261,
+					y: 221,
+					w: 130,
+					h: 206
+				},
+				{
+					x: 2431,
+					y: 221,
+					w: 145,
+					h: 206
+				}
+			],
+			splitsAlongX:false,
+			splitSeparation: 55
+		},
+		avocado: {
+			x: 3136,
+			y: 4,
+			w: 150,
+			h: 233,
+	        splits: [
+				{
+					x: 3115,
+					y: 238,
+					w: 130,
+					h: 215
+				},
+				{
+					x: 3248,
+					y: 238,
+					w: 125,
+					h: 207
+				}
+			],
+			splitsAlongX:false,
+			splitSeparation: 55
 		}
 	};
 	var spriteKeys = (function(){
@@ -130,6 +218,9 @@ var VeggieFactory = (function(){
 					new Veggie(k,sprites[k],true));
 			});
 			return veggies;
+		},
+		one: function(key){
+			return new Veggie(key,sprites[key],true);
 		},
 		random: function(){
 			var k = randomSpriteKey();

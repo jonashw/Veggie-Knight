@@ -13,6 +13,10 @@
 	<script type="text/javascript" src="src/ComboNotice.js"></script>
 	<script type="text/javascript" src="src/ScoreBoard.js"></script>
 	<script type="text/javascript" src="src/PauseScreen.js"></script>
+	<script type="text/javascript" src="src/Random.js"></script>
+	<script type="text/javascript" src="src/Mode.js"></script>
+	<script type="text/javascript" src="src/NormalMode.js"></script>
+	<script type="text/javascript" src="src/FrenzyMode.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
 	<meta name="viewport" content="width=device-width, user-scalable=no">
@@ -20,11 +24,15 @@
 	<script>
 		window.onload = function(){
 			var canvas = document.getElementById('canvas');
+			var bgImg = {
+				green: document.getElementById('rays-green'),
+				blue: document.getElementById('rays-blue')
+			};
 			var stage = new Stage(
 				canvas,
 				document.getElementById('img'),
-				500,300,
-				document.getElementById('rays'));
+				800,500,
+				bgImg.green);
 			var gameLoop = new GameLoop(stage);
 			var veggieLauncher = new VeggieLauncher(stage);
 			var controls = new Controls(canvas,stage,gameLoop,veggieLauncher);
@@ -38,22 +46,35 @@
 			controls.on('combo',function(comboSize,x,y){
 				stage.notices.push(new ComboNotice(comboSize,x,y));
 			});
-			function launch(){
-				veggieLauncher.randomLaunch(VeggieFactory.randomSet());
+			var normalMode = new NormalMode(gameLoop,veggieLauncher,bgImg.green);
+			var frenzyMode = new FrenzyMode(gameLoop,veggieLauncher,2000,bgImg.blue);
+			var currentMode = normalMode;
+			function toMode(mode){
+				currentMode.stop();
+				currentMode = mode;
+				stage.bgImg = currentMode.bgImg;
+				currentMode.start();
 			}
-			setInterval(function(){
-				if(gameLoop.isRunning()){
-					launch();
-				}
-			}, 2500)
+			function toggleMode(){
+				var nextMode = currentMode == normalMode
+					? frenzyMode
+					: normalMode;
+				toMode(nextMode);
+			}
+			gameLoop.on('stop',function(){
+				currentMode.stop();
+			});
 			gameLoop.on('start',function(){
-				launch();
+				currentMode.start();
 			});
 			$('#playPause').on('touch click',function(){
 				gameLoop.playPause();
 			});
 			$('#fullscreen').on('touch click',function(){
 				requestFullscreen(canvas);
+			});
+			$('#toggleMode').on('touch click',function(){
+				toggleMode();
 			});
 		};
 		function requestFullscreen(elem){
@@ -70,7 +91,8 @@
 	</script>
 </head>
 <body>
-	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays" style="display:none;">
+	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays-green" style="display:none;">
+	<img src="img/bg-pinwheel-rays-blue-1000.png" id="rays-blue" style="display:none;">
 	<div class="container text-center">
 		<img src="img/VeggieKnight.gif" class="img-responsive" style="margin:0 auto;">
 		<a href="https://github.com/jonashw/Veggie-Knight/">View project on GitHub</a>
@@ -80,6 +102,7 @@
 		<img id="img" src="img/veggies.png" style="display:none;"/>
 		<button id="playPause">Play/Pause</button>
 		<button id="fullscreen">Full Screen</button>
+		<button id="toggleMode">Toggle Between Normal/Frenzy Modes</button>
 		<br>
 		<br>
 		<canvas id="canvas"></canvas>

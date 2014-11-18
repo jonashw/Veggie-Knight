@@ -24,12 +24,12 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			600,400);
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
-			veggie.pos.y = 80;
+			veggie.pos.x = 100 * ((i % 6) + 0.5);
+			veggie.pos.y = 100 + (Math.floor(i / 6) * 120);
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
@@ -38,12 +38,13 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			600,300);
 		stage.init();
 		var veggies = new VeggieFactory.fullSplitSet();
+		var veggiesPerRow = 6;
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 50 * (i + .5);
-			veggie.pos.y = 80;
+			veggie.pos.x = 100 * ((i % veggiesPerRow) + 0.5);
+			veggie.pos.y = 60 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
@@ -54,12 +55,13 @@ function runTests(testCase){
 			var stage = new Stage(
 				canvas,
 				img,
-				500,200);
+				620,400);
 			stage.init();
 			var veggies = new VeggieFactory.fullSet();
+			var veggiesPerRow = 4;
 			veggies.forEach(function(veggie,i){
-				veggie.pos.x = 100 * (i + 0.5);
-				veggie.pos.y = 80;
+				veggie.pos.x = 160 * ((i % veggiesPerRow) + 0.5);
+				veggie.pos.y = 85 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
 				stage.veggies.push(veggie);
 				veggie.rot = 45 * n;
 			});
@@ -82,11 +84,11 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			750,200);
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
@@ -120,13 +122,13 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			750,200);
 		stage.init();
 		var controls = new Controls(canvas,stage);
 		controls.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
@@ -155,7 +157,7 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			750,200);
 		stage.init();
 		SwipeEvents(canvas);
 		var controls = new Controls(canvas,stage);
@@ -191,13 +193,13 @@ function runTests(testCase){
 				scoreBoard.appendChild(comboRecord);
 			}
 		}
-		var stage = new Stage(canvas, img, 500,200);
+		var stage = new Stage(canvas, img, 750,200);
 		stage.init();
 		var controls = new Controls(canvas,stage);
 		controls.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 1);
+			veggie.pos.x = 80 * (i + 0.5);
 			veggie.pos.y = 80;
 			stage.veggies.push(veggie);
 		});
@@ -269,6 +271,47 @@ function runTests(testCase){
 	testLauncher('bounce',function(launcher){
 		launcher.bounce(VeggieFactory.randomFlush(5));
 	},5500);
+	testLauncher('rain',function(launcher){
+		launcher.rain(VeggieFactory.randomFlush(6));
+	},5000);
+	testLauncher('frenzy (left)',function(launcher){
+		launcher.frenzyLeft(VeggieFactory.randomFlush(6));
+	},2000);
+	testLauncher('frenzy (right)',function(launcher){
+		launcher.frenzyRight(VeggieFactory.randomFlush(6));
+	},2000);
+	testLauncher('frenzy (both)',function(launcher){
+		launcher.frenzyLeft(VeggieFactory.randomSet(6));
+		launcher.frenzyRight(VeggieFactory.randomSet(6));
+	},2000);
+
+	testCase('Normal mode', function(canvas,img){
+		var ctx = canvas.getContext('2d');
+		var stage = new Stage(
+			canvas,
+			img,
+			500,300);
+		stage.init();
+		var launcher = new VeggieLauncher(stage);
+		var gameLoop = new GameLoop(stage);
+		stage.draw();
+		gameLoop.start();
+		new NormalMode(gameLoop, launcher).start();
+	});
+
+	testCase('Frenzy mode (2 second bursts)', function(canvas,img){
+		var ctx = canvas.getContext('2d');
+		var stage = new Stage(
+			canvas,
+			img,
+			500,300);
+		stage.init();
+		var launcher = new VeggieLauncher(stage);
+		var gameLoop = new GameLoop(stage);
+		stage.draw();
+		gameLoop.start();
+		new FrenzyMode(gameLoop, launcher, 2000).start();
+	});
 	
 	testCase('Combo notice',function(canvas,img){
 		var ctx = canvas.getContext('2d');
@@ -323,7 +366,7 @@ function runTests(testCase){
 		stage.draw();
 	});
 	
-	testCase('Pause screen',function(canvas,img){
+	testCase('Pause screen (press Space Bar)',function(canvas,img){
 		var stage = new Stage(canvas, img, 500, 300);
 		var gameLoop = new GameLoop(stage);
 		var controls = new Controls(canvas,stage,gameLoop);
