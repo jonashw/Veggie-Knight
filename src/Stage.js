@@ -9,7 +9,7 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 				return;
 			}
 			_ctx.save();
-			_ctx.translate(s/4, s/4);
+			_ctx.translate(s/3, s/3);
 			_ctx.rotate(Convert.degToRad(bgRot));
 			_ctx.drawImage(
 				self.bgImg,
@@ -60,7 +60,7 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 			_ctx.canvas.width = width;
 			_ctx.canvas.height = height;
 			_img = veggieImg;
-			_scaleFactor = 0.27;
+			_scaleFactor = 0.35;
 			//console.log('canvas width:',width,' image width:',_img.width, ' scale factor:',_scaleFactor);
 		},
 		veggies: [],

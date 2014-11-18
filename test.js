@@ -24,12 +24,12 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			600,400);
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 80 * (i + 0.5);
-			veggie.pos.y = 80;
+			veggie.pos.x = 100 * ((i % 6) + 0.5);
+			veggie.pos.y = 100 + (Math.floor(i / 6) * 120);
 			stage.veggies.push(veggie);
 		});
 		stage.draw();
@@ -38,12 +38,12 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			600,300);
 		stage.init();
 		var veggies = new VeggieFactory.fullSplitSet();
-		var veggiesPerRow = 10;
+		var veggiesPerRow = 6;
 		veggies.forEach(function(veggie,i){
-			veggie.pos.x = 50 * ((i % veggiesPerRow) + 0.5);
+			veggie.pos.x = 100 * ((i % veggiesPerRow) + 0.5);
 			veggie.pos.y = 60 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
 			stage.veggies.push(veggie);
 		});
@@ -55,13 +55,13 @@ function runTests(testCase){
 			var stage = new Stage(
 				canvas,
 				img,
-				500,250);
+				620,400);
 			stage.init();
 			var veggies = new VeggieFactory.fullSet();
-			var veggiesPerRow = 5;
+			var veggiesPerRow = 4;
 			veggies.forEach(function(veggie,i){
-				veggie.pos.x = 100 * ((i % veggiesPerRow) + 0.5);
-				veggie.pos.y = 70 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
+				veggie.pos.x = 160 * ((i % veggiesPerRow) + 0.5);
+				veggie.pos.y = 85 * (1 + 1.5 * Math.floor(i / veggiesPerRow));
 				stage.veggies.push(veggie);
 				veggie.rot = 45 * n;
 			});
@@ -84,7 +84,7 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			750,200);
 		stage.init();
 		var veggies = new VeggieFactory.fullSet();
 		veggies.forEach(function(veggie,i){
@@ -122,7 +122,7 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			750,200);
 		stage.init();
 		var controls = new Controls(canvas,stage);
 		controls.init();
@@ -157,7 +157,7 @@ function runTests(testCase){
 		var stage = new Stage(
 			canvas,
 			img,
-			500,200);
+			750,200);
 		stage.init();
 		SwipeEvents(canvas);
 		var controls = new Controls(canvas,stage);
@@ -193,7 +193,7 @@ function runTests(testCase){
 				scoreBoard.appendChild(comboRecord);
 			}
 		}
-		var stage = new Stage(canvas, img, 500,200);
+		var stage = new Stage(canvas, img, 750,200);
 		stage.init();
 		var controls = new Controls(canvas,stage);
 		controls.init();
