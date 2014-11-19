@@ -30,12 +30,10 @@ function Veggie(type,sprite,whole){
 		return (x1 <= x && x <= x2) && (y1 <= y && y <= y2);
 	};
 	this.update = function(){
-		//apply velocity
-		this.pos.y -= this.vel.y;//cause the canvas is flipped :/
+		this.pos.y -= this.vel.y;
 		this.pos.x += this.vel.x;
-		//apply gravity
-		this.vel.y -= 0.1;//cause the canvas is flipped :/
-		//apply rotational velocity
+		//split veggies fall faster than whole ones
+		this.vel.y -= (this.whole ? 0.1 : 0.3);
 		this.rot += this.rotVel;
 	};
 	var getSplitVeggies = (function(){

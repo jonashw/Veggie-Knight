@@ -76,6 +76,7 @@
 			$('#toggleMode').on('touch click',function(){
 				toggleMode();
 			});
+			gameLoop.playPause();
 		};
 		function requestFullscreen(elem){
 			if (elem.requestFullscreen) {
@@ -91,10 +92,10 @@
 	</script>
 </head>
 <body>
-	<img src="img/bg-pinwheel-rays-green-1000.png" id="rays-green" style="display:none;">
-	<img src="img/bg-pinwheel-rays-blue-1000.png" id="rays-blue" style="display:none;">
+	<img src="img/pinwheel-green-1200.png" id="rays-green" style="display:none;">
+	<img src="img/pinwheel-blue-1200.png" id="rays-blue" style="display:none;">
 	<div class="container text-center">
-		<img src="img/VeggieKnight.gif" class="img-responsive" style="margin:0 auto;">
+		<img src="img/VeggieKnight.png" class="img-responsive" style="margin:0 auto;">
 		<a href="https://github.com/jonashw/Veggie-Knight/">View project on GitHub</a>
 		<hr>
 		<p class="lead">It's like <a href="http://fruitninja.com/">Fruit Ninja</a> but with Veggies</p>

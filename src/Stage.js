@@ -2,25 +2,21 @@ var Stage = function(canvas,veggieImg,width,height,bgImg){
 	var _img, _ctx;
 	var drawBg = (function(){
 		var bgRot = 1;
-		var s = 1000;
-		var ss = s / 1;
+		var s = 1200;
 		return function(){
 			if(!self.bgImg){
 				return;
 			}
+			var dx = _ctx.canvas.width / 2;
+			var dy = _ctx.canvas.height / 2;
 			_ctx.save();
-			_ctx.translate(s/3, s/3);
+			_ctx.translate(dx, dy);
 			_ctx.rotate(Convert.degToRad(bgRot));
+			_ctx.translate(-s/2, -s/2);
 			_ctx.drawImage(
 				self.bgImg,
 				0,
-				0,
-				s,
-				s,
-				ss/-2,
-				ss/-2,
-				ss,
-				ss);
+				0);
 			_ctx.restore();
 			bgRot+=0.125;
 		};

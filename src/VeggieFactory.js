@@ -74,9 +74,9 @@ var VeggieFactory = (function(){
 	        splits: [
 				{
 					x: 1260,
-					y: 8,
+					y: 18,
 					w: 84,
-					h: 160
+					h: 170
 				},
 				{
 					x: 1262,
