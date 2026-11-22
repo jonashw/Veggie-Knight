@@ -18,6 +18,7 @@
 	<script type="text/javascript" src="src/NormalMode.js"></script>
 	<script type="text/javascript" src="src/FrenzyMode.js"></script>
 	<script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
+	<script type="module" src="src/speed.js"></script>
 	<link rel="stylesheet" href="bootstrap.yeti.min.css" />
 	<meta name="viewport" content="width=device-width, user-scalable=no">
 	<title>Veggie Knight</title>
@@ -77,6 +78,16 @@
 				toggleMode();
 			});
 			gameLoop.playPause();
+			// for the speed readout and speed run (src/speed.js)
+			window.veggieKnight = {
+				stage: stage,
+				gameLoop: gameLoop,
+				normalMode: normalMode,
+				frenzyMode: frenzyMode,
+				toMode: toMode,
+				getMode: function(){ return currentMode; }
+			};
+			document.dispatchEvent(new CustomEvent('veggieknight:ready', {detail: window.veggieKnight}));
 		};
 		function requestFullscreen(elem){
 			if (elem.requestFullscreen) {
@@ -104,6 +115,7 @@
 		<button id="playPause">Play/Pause</button>
 		<button id="fullscreen">Full Screen</button>
 		<button id="toggleMode">Toggle Between Normal/Frenzy Modes</button>
+		<div id="speedControls" style="display:flex;justify-content:center;margin-top:10px;"></div>
 		<br>
 		<br>
 		<canvas id="canvas"></canvas>
@@ -112,6 +124,8 @@
 		<kbd>Space</kbd> Play/Pause
 		<span style="padding:0 1em;" class="text-muted">&bull;</span>
 		<kbd>Swipe</kbd> Slice veggies
+		<span style="padding:0 1em;" class="text-muted">&bull;</span>
+		<kbd>F</kbd> Speed readout
 		<br>
 		<br>
 		<br>
